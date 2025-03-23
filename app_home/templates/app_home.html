@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block 'title' %}Página Inicial - Meu Site{% endblock %}
+
+{% block 'head' %}
+    <!-- Estilos ou scripts específicos para a página inicial -->
+    <link rel="stylesheet" href="{% static 'general/css/home.css' %}">
+{% endblock %}
+
+{% block 'content' %}
+    <h1>Bem-vindo à Página Inicial!</h1>
+    <p>Este é o conteúdo específico da página inicial.</p>
+{% endblock %}x

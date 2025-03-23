@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang = "pt-BR">
+    <head>
+        
+        <meta charset="UTF-8">
+        <name name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link real="stylesheet" href="{% static 'general/css/base.css' %}">
+        <link real="stylesheet" href="{% static 'general/css/general.css' %}">
+        {% block 'head' %}{% endblock %}
+
+        <title>{% block 'title' %}{% endblock %}</title>
+    </head>
+
+    <body>
+        <div class="sidebar">
+            <div class="logo-datails">
+                <div class="logo_name">LOGO</div>
+                <i class='bx bx-menu' id="btn"></i>
+            </div>
+
+            <ul class="nav-list">
+                <li>
+                    <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Início</a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <i class='bx bx-user'></i>
+                        <span class='links_name'>página genérica</span>
+                    </a>
+                    <span class="tooltip">página genérica</span>
+                </li>
+
+            </ul>
+
+        </div>
+
+        <section class="home-section">
+            {% block 'dashboard' %}{% endblock %}
+        </section>
+        {% block 'body' %}{% endblock %}
+
+        <script src="{% static 'general/js/base.js' %}"></script>
+    </body>
+</html>
