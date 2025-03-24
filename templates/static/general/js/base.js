@@ -1,21 +1,18 @@
+// Select elements
 let sidebar = document.querySelector(".sidebar");
-let closeBtn = document.querySelector("#btn");
-let searchBtn = document.querySelector(".bx-search");
+let closeBtn = document.querySelector("#btn"); // Matches the ID in HTML
 
-closeBtn.addEventListener("click", ()=>{
+// Toggle sidebar on hamburger click
+closeBtn.addEventListener("click", () => {
     sidebar.classList.toggle("open");
-    menuBtnChange();
+    menuBtnChange(); // Update hamburger icon
 });
 
-searchBtn.addEventListener("click", ()=>{ 
-    sidebar.classList.toggle("open");
-    menuBtnChange();
-});
-
+// Function to change hamburger icon
 function menuBtnChange() {
-if(sidebar.classList.contains("open")){
-    closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
-}else {
-    closeBtn.classList.replace("bx-menu-alt-right","bx-menu");
-}
+    if (sidebar.classList.contains("open")) {
+        closeBtn.textContent = "close"; // Change to close icon
+    } else {
+        closeBtn.textContent = "menu"; // Change back to menu icon
+    }
 }

@@ -7,4 +7,5 @@ V.:
   -0.0.0.0.0.0.0.0.005 (base.html/base.css/general.css)
   -0.0.0.0.0.0.0.0.006 (folder fixes)
   -0.0.0.0.0.0.0.0.007 (color pallet fix)
-  -0.0.0.0.0.0.0.0.008 (hamburger fix try)
+  -0.0.0.0.0.0.0.0.008 (hamburguer fix try)
+    -0.0.0.0.0.0.0.0.008.1 (hamburguer fix saga)
