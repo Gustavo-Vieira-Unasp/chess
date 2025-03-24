@@ -5,4 +5,4 @@ V.:
   -0.0.0.0.0.0.0.0.003 (dirs settings)
   -0.0.0.0.0.0.0.0.004 (app_home created)
   -0.0.0.0.0.0.0.0.005 (base.html/base.css/general.css)
-  -
+  -0.0.0.0.0.0.0.0.006 (folder organizations)

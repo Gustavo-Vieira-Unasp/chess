@@ -1,14 +1,23 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block 'title' %}Página Inicial - Meu Site{% endblock %}
-
-{% block 'head' %}
-    <!-- Estilos ou scripts específicos para a página inicial -->
-    <link rel="stylesheet" href="{% static 'general/css/home.css' %}">
+{% block 'title' %}
+Chess Manager - Home
 {% endblock %}
 
-{% block 'content' %}
-    <h1>Bem-vindo à Página Inicial!</h1>
-    <p>Este é o conteúdo específico da página inicial.</p>
-{% endblock %}x
+{% block 'head' %}
+<!-- Add app-specific CSS or meta tags -->
+<link rel="stylesheet" href="{% static 'app_home/css/home.css' %}">
+{% endblock %}
+
+{% block 'dashboard' %}
+<div class="home-content">
+    <h1>Welcome to Chess Manager</h1>
+    <p>This is the home page for the Chess Manager application.</p>
+</div>
+{% endblock %}
+
+{% block 'body' %}
+<!-- Optional: Add additional scripts or content -->
+<script src="{% static 'app_home/js/home.js' %}"></script>
+{% endblock %}
