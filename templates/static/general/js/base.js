@@ -1,18 +1,21 @@
-// Prevent default behavior for disabled links
-document.querySelectorAll('.disabled').forEach(link => {
-    link.addEventListener('click', e => e.preventDefault());
+let sidebar = document.querySelector(".sidebar");
+let closeBtn = document.querySelector("#btn");
+let searchBtn = document.querySelector(".bx-search");
+
+closeBtn.addEventListener("click", ()=>{
+    sidebar.classList.toggle("open");
+    menuBtnChange();
 });
 
-// Sidebar toggle functionality
-document.addEventListener('DOMContentLoaded', () => {
-    const sidebarToggle = document.getElementById('sidebar-toggle');
-    const sidebar = document.getElementById('sidebar');
-
-    if (sidebarToggle && sidebar) {
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-            const isExpanded = !sidebar.classList.contains('collapsed');
-            sidebarToggle.setAttribute('aria-expanded', isExpanded);
-        });
-    }
+searchBtn.addEventListener("click", ()=>{ 
+    sidebar.classList.toggle("open");
+    menuBtnChange();
 });
+
+function menuBtnChange() {
+if(sidebar.classList.contains("open")){
+    closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+}else {
+    closeBtn.classList.replace("bx-menu-alt-right","bx-menu");
+}
+}
