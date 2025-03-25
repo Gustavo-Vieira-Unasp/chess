@@ -1,18 +1,14 @@
-// Select elements
-let sidebar = document.querySelector(".sidebar");
-let closeBtn = document.querySelector("#btn"); // Matches the ID in HTML
+    const btn = document.querySelector("#btn");
+    const sidebar = document.querySelector(".sidebar");
 
-// Toggle sidebar on hamburger click
-closeBtn.addEventListener("click", () => {
-    sidebar.classList.toggle("open");
-    menuBtnChange(); // Update hamburger icon
-});
+    btn.addEventListener("click", () => {
+      sidebar.classList.toggle("open");
 
-// Function to change hamburger icon
-function menuBtnChange() {
-    if (sidebar.classList.contains("open")) {
-        closeBtn.textContent = "close"; // Change to close icon
-    } else {
-        closeBtn.textContent = "menu"; // Change back to menu icon
-    }
-}
+      if (sidebar.classList.contains("open")) {
+        btn.classList.remove("bx-menu");
+        btn.classList.add("bx-x");
+      } else {
+        btn.classList.remove("bx-x");
+        btn.classList.add("bx-menu");
+      }
+    })

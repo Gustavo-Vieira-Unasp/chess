@@ -9,3 +9,4 @@ V.:
   -0.0.0.0.0.0.0.0.007 (color pallet fix)
   -0.0.0.0.0.0.0.0.008 (hamburguer fix try)
     -0.0.0.0.0.0.0.0.008.1 (hamburguer fix saga)
+  -0.0.0.0.0.0.0.0.009 (hamburguer and logo finished)
