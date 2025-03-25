@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app_home',
+    'app_simple_tournament',
 ]
 
 MIDDLEWARE = [
