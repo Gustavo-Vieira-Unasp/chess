@@ -1,6 +1,3 @@
-/* Importing the Poppins font from Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
-
 /* General reset for margin, padding, and box-sizing */
 * {
   margin: 0;
@@ -19,7 +16,7 @@
   background: var(--dark-color); /* Background color using CSS variable */
   padding: 6px 14px;
   z-index: 99; /* Ensures it stays above other elements */
-  transition: all 0.5s ease; /* Smooth transition for animations */
+  transition: all var(--transition-speed) ease; /* Smooth transition for animations */
 }
 .sidebar.open {
   width: 250px; /* Expanded width when open */
@@ -34,21 +31,21 @@
 }
 .sidebar .logo-details .icon {
   opacity: 0; /* Hidden by default */
-  transition: all 0.5s ease;
+  transition: all var(--transition-speed) ease;
 }
 .sidebar .logo-details .logo_name {
   color: #fff; /* White text color */
   font-size: 20px;
   font-weight: 600;
   opacity: 0; /* Hidden by default */
-  transition: all 0.5s ease;
+  transition: all var(--transition-speed) ease;
 }
 .sidebar.open .logo-details .icon,
 .sidebar.open .logo-details .logo_name {
   opacity: 1; /* Visible when sidebar is open */
 }
 
-/* Hamburger/Close button (change color here) */
+/* Hamburger/Close button */
 .sidebar .logo-details #btn {
   position: absolute;
   top: 50%;
@@ -57,7 +54,7 @@
   font-size: 23px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.5s ease;
+  transition: all var(--transition-speed) ease;
   color: #fff; /* Change this to adjust the hamburger and close icon color */
 }
 .sidebar.open .logo-details #btn {
@@ -100,12 +97,13 @@
   opacity: 0;
   white-space: nowrap;
   pointer-events: none;
-  transition: 0s;
+  transition: opacity var(--transition-speed) ease;
+  transition-delay: 0.2s; /* Delay before showing */
 }
 .sidebar li:hover .tooltip {
   opacity: 1;
   pointer-events: auto;
-  transition: all 0.4s ease;
+  transition-delay: 0s; /* No delay when hiding */
   top: 50%;
   transform: translateY(-50%);
 }
@@ -122,8 +120,8 @@
   height: 50px;
   width: 50px;
   border: none;
-  border-radius: 12px;
-  transition: all 0.5s ease;
+  border-radius: var(--border-radius);
+  transition: all var(--transition-speed) ease;
   background: var(--main-color);
 }
 .sidebar.open input {
@@ -155,7 +153,7 @@
   display: flex;
   height: 100%;
   width: 100%;
-  border-radius: 12px;
+  border-radius: var(--border-radius);
   align-items: center;
   text-decoration: none;
   transition: all 0.4s ease;
@@ -171,7 +169,7 @@
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
-  transition: 0.4s;
+  transition: opacity var(--transition-speed) ease;
 }
 .sidebar.open li a .links_name {
   opacity: 1;
@@ -179,14 +177,14 @@
 }
 .sidebar li a:hover .links_name,
 .sidebar li a:hover i {
-  transition: all 0.5s ease;
+  transition: all var(--transition-speed) ease;
   color: var(--main-color);
 }
 .sidebar li i {
   height: 50px;
   line-height: 50px;
   font-size: 18px;
-  border-radius: 12px;
+  border-radius: var(--border-radius);
 }
 
 /* Profile section styling */
@@ -198,7 +196,7 @@
   bottom: -8px;
   padding: 10px 14px;
   background: var(--main-color);
-  transition: all 0.5s ease;
+  transition: all var(--transition-speed) ease;
   overflow: hidden;
 }
 .sidebar.open li.profile {
@@ -236,7 +234,7 @@
   height: 60px;
   line-height: 60px;
   border-radius: 0px;
-  transition: all 0.5s ease;
+  transition: all var(--transition-speed) ease;
 }
 .sidebar.open .profile #log_out {
   width: 50px;
@@ -252,7 +250,7 @@
   left: 78px;
   color: white;
   width: calc(100% - 78px);
-  transition: all 0.5s ease;
+  transition: all var(--transition-speed) ease;
   z-index: 2;
 }
 .sidebar.open ~ .home-section {
@@ -269,6 +267,20 @@
 
 /* Media query for small screens */
 @media (max-width: 420px) {
+  .sidebar {
+    width: 60px; /* Smaller collapsed width */
+  }
+  .sidebar.open {
+    width: 200px; /* Smaller expanded width */
+  }
+  .home-section {
+    left: 60px;
+    width: calc(100% - 60px);
+  }
+  .sidebar.open ~ .home-section {
+    left: 200px;
+    width: calc(100% - 200px);
+  }
   .sidebar li .tooltip {
     display: none; /* Hide tooltips on small screens */
   }

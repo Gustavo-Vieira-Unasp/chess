@@ -9,11 +9,11 @@
     <meta name="keywords" content="chess">
     <meta name="author" content="Gustavo Vieira">
 
-    <!-- Material Icons -->
+    <!-- Font Import -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Boxicons (Recommended for Consistency) -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=emoji_events" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'general/css/base.css' %}">
@@ -36,19 +36,19 @@
         <ul class="nav-list">
             <li>
                 <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
-                    <i class='material-icons'>home</i>
+                    <i class='bx bx-home' aria-label="Início"></i>
                     <span class='links_name'>Início</span>
                 </a>
             </li>
             <li>
-                <a href="{% url 'simple_tournament' %}" class="{% if request.resolver.match.url_name == 'simple_tournament' %}active{% endif %}">
-                    <span class="material-symbols-outlined">emoji_events</span>
+                <a href="{% url 'simple_tournament' %}" class="{% if request.resolver_match.url_name == 'simple_tournament' %}active{% endif %}">
+                    <i class='bx bx-trophy' aria-label="Torneio Simples"></i>
                     <span class='links_name'>Torneio Simples</span>
                 </a>
             </li>
             <li>
                 <a href="#" class="disabled" aria-disabled="true" tabindex="-1">
-                    <i class='material-icons'>person</i>
+                    <i class='bx bx-user' aria-label="Página Genérica"></i>
                     <span class='links_name'>Página Genérica</span>
                 </a>
             </li>
