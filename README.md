@@ -13,3 +13,4 @@ V.:
   -0.0.0.0.0.0.0.0.010 (app_simple_tournament created)
   -0.0.0.0.0.0.0.0.011 (app_simple_tournamnet edited)
   -0.0.0.0.0.0.0.0.012 (simple_tournament.css configuration)
+  -0.0.0.0.0.0.0.0.013 (commit clearing)

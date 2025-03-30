@@ -1,48 +1,57 @@
 {% extends 'base.html' %}
 {% load static %}
 
+<!-- Title Block -->
 {% block 'title' %}
 simple_tournament
 {% endblock %}
 
+<!-- Head Block: CSS and Meta Tags -->
 {% block 'head' %}
-<!-- Add app-specific CSS or meta tags -->
 <link rel="stylesheet" href="{% static 'app_simple_tournament/css/simple_tournament.css' %}">
 {% endblock %}
 
+<!-- Dashboard Block: Main Content -->
 {% block 'dashboard' %}
 <div class="dashboard">
-    <div class="container">
+    <!-- Container (Now Acts as the Button) -->
+    <div class="container" id="createTournamentBtn">
         <!-- Tournament Bracket Section -->
         <svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
-            <!-- Group All Elements Together -->
             <g class="svg-group">
-                <!-- Team Rectangles -->
                 <rect class="team" x="60" y="80" width="60" height="30" fill="#939291" />
                 <rect class="team" x="60" y="180" width="60" height="30" fill="#939291" />
-              
-                <!-- Horizontal Lines -->
                 <line class="line" x1="120" y1="95" x2="150" y2="95" stroke="#939291" stroke-width="2" />
                 <line class="line" x1="120" y1="195" x2="150" y2="195" stroke="#939291" stroke-width="2" />
                 <line class="line" x1="150" y1="145" x2="180" y2="145" stroke="#939291" stroke-width="2" />
-              
-                <!-- Vertical Line -->
                 <line class="line" x1="150" y1="95" x2="150" y2="195" stroke="#939291" stroke-width="2" />
-              
-                <!-- Match Rectangle -->
                 <rect class="match" x="180" y="130" width="60" height="30" fill="#939291" />
             </g>
         </svg>
 
         <!-- Written Content Section -->
         <div class="text-section">
-            Torneio em andamento...
+            Criar Torneio Simples
+        </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="tournamentModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Create Tournament</h2>
+            <form id="tournamentForm" method="POST" action="{% url 'create_tournament' %}">
+                {% csrf_token %}
+                <label for="tournament_name">Tournament Name:</label>
+                <input type="text" id="tournament_name" name="tournament_name" required>
+                <button type="submit">Submit</button>
+            </form>
         </div>
     </div>
 </div>
 {% endblock %}
 
+<!-- Body Block: JavaScript -->
 {% block 'body' %}
-<!-- Optional: Add additional scripts or content -->
 <script src="{% static 'app_simple_tournament/js/simple_tournament.js' %}"></script>
 {% endblock %}
