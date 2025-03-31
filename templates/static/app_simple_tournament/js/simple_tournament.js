@@ -1,36 +1,30 @@
 // Wait for the DOM to fully load
 document.addEventListener("DOMContentLoaded", function () {
-    // Get the modal
-    var modal = document.getElementById("tournamentModal");
+    const modal = document.getElementById("tournamentModal");
+    const btn = document.getElementById("createTournamentBtn");
+    const span = document.getElementsByClassName("close")[0];
 
-    // Get the button that opens the modal
-    var btn = document.getElementById("createTournamentBtn");
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-
-    // Open the modal when the button is clicked
-    if (btn) {
-        btn.onclick = function () {
-            if (modal) {
-                modal.style.display = "block";
-            }
-        };
-    }
-
-    // Close the modal when the user clicks on <span> (x)
-    if (span) {
-        span.onclick = function () {
-            if (modal) {
-                modal.style.display = "none";
-            }
-        };
-    }
-
-    // Close the modal if the user clicks outside of it
-    window.onclick = function (event) {
-        if (modal && event.target == modal) {
-            modal.style.display = "none";
+    // Modal Functions
+    const showModal = () => {
+        if (modal) {
+            modal.style.display = "block";
+            document.getElementById("tournament_name").focus(); // Focus on the input field
         }
     };
+    const hideModal = () => modal && (modal.style.display = "none");
+
+    // Event Listeners
+    if (btn) btn.onclick = showModal;
+    if (span) span.onclick = hideModal;
+
+    window.onclick = function (event) {
+        if (modal && event.target === modal) hideModal();
+    };
+
+    // Close modal with Escape key
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && modal && modal.style.display === "block") {
+            hideModal();
+        }
+    });
 });

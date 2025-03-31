@@ -15,3 +15,4 @@ V.:
   -0.0.0.0.0.0.0.0.012 (simple_tournament.css configuration)
   -0.0.0.0.0.0.0.0.013 (commit cleaning)
   -0.0.0.0.0.0.0.0.014 (readme update, fix)
+  -0.0.0.0.0.0.0.0.015 (generic tournaments placeholder)

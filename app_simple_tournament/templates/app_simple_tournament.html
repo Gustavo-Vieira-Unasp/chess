@@ -3,7 +3,7 @@
 
 <!-- Title Block -->
 {% block 'title' %}
-simple_tournament
+Simple Tournament
 {% endblock %}
 
 <!-- Head Block: CSS and Meta Tags -->
@@ -12,45 +12,55 @@ simple_tournament
 {% endblock %}
 
 <!-- Dashboard Block: Main Content -->
+<!-- Dashboard Block: Main Content -->
 {% block 'dashboard' %}
 <div class="dashboard">
-    <!-- Container (Now Acts as the Button) -->
-    <div class="container" id="createTournamentBtn">
+    <!-- First Container: Create Tournament -->
+    <div class="container" id="createTournamentBtn" onclick="document.getElementById('tournamentModal').style.display='block'">
         <!-- Tournament Bracket Section -->
-        <svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
-            <g class="svg-group">
-                <rect class="team" x="60" y="80" width="60" height="30" fill="#939291" />
-                <rect class="team" x="60" y="180" width="60" height="30" fill="#939291" />
-                <line class="line" x1="120" y1="95" x2="150" y2="95" stroke="#939291" stroke-width="2" />
-                <line class="line" x1="120" y1="195" x2="150" y2="195" stroke="#939291" stroke-width="2" />
-                <line class="line" x1="150" y1="145" x2="180" y2="145" stroke="#939291" stroke-width="2" />
-                <line class="line" x1="150" y1="95" x2="150" y2="195" stroke="#939291" stroke-width="2" />
-                <rect class="match" x="180" y="130" width="60" height="30" fill="#939291" />
-            </g>
-        </svg>
+        <div class="bracket-section">
+            {% include 'app_simple_tournament/svg/tournament_bracket.html' %}
+        </div>
 
-        <!-- Written Content Section -->
+        <!-- Text Section with "Create" Button -->
         <div class="text-section">
-            Criar Torneio Simples
+            <div class="create-btn">Criar Torneio Simples</div>
         </div>
     </div>
 
-    <!-- The Modal -->
-    <div id="tournamentModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Create Tournament</h2>
-            <form id="tournamentForm" method="POST" action="{% url 'create_tournament' %}">
-                {% csrf_token %}
-                <label for="tournament_name">Tournament Name:</label>
-                <input type="text" id="tournament_name" name="tournament_name" required>
-                <button type="submit">Submit</button>
-            </form>
+    <!-- Dynamically Generated Tournament Containers -->
+    {% for tournament in tournaments %}
+        <div class="container" onclick="location.href='#'">
+            <!-- Tournament Bracket Section -->
+            <div class="bracket-section">
+                {% include 'app_simple_tournament/svg/tournament_bracket.html' %}
+            </div>
+
+            <!-- Text Section with Tournament Name -->
+            <div class="text-section">
+                {{ tournament.name }}
+            </div>
         </div>
+    {% endfor %}
+</div>
+
+<!-- The Modal -->
+<div id="tournamentModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Create Tournament</h2>
+        {% if error %}
+            <p style="color: red;">{{ error }}</p>
+        {% endif %}
+        <form id="tournamentForm" method="POST" action="{% url 'create_tournament' %}">
+            {% csrf_token %}
+            <label for="tournament_name">Tournament Name:</label>
+            <input type="text" id="tournament_name" name="tournament_name" required>
+            <button type="submit">Submit</button>
+        </form>
     </div>
 </div>
 {% endblock %}
-
 <!-- Body Block: JavaScript -->
 {% block 'body' %}
 <script src="{% static 'app_simple_tournament/js/simple_tournament.js' %}"></script>

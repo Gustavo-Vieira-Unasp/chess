@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Title Block -->
+{% block 'title' %}
+simple_tournament
+{% endblock %}
+
+<!-- Head Block: CSS and Meta Tags -->
+{% block 'head' %}
+<link rel="stylesheet" href="{% static 'app_simple_tournament/css/simple_tournament.css' %}">
+{% endblock %}
+
+<!-- Dashboard Block: Main Content -->
+{% block 'dashboard' %}
+<div class="dashboard">
+<body>
+    <h1>{{ message }}</h1>
+    <p><strong>Tournament Name:</strong> {{ tournament_name }}</p>
+    <a href="{% url 'home' %}">Return to Home</a>
+</body>
+</div>
+</html>
+{% endblock %}

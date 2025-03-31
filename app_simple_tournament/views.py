@@ -1,33 +1,36 @@
-from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponseNotAllowed
+from django.urls import reverse
 from .models import Tournament
 
 def simple_tournament(request):
-    """
-    Renders the page where users can create a tournament.
-    """
-    return render(request, 'app_simple_tournament.html')
+    # Query all tournaments from the database
+    tournaments = Tournament.objects.all().order_by('-id')  # Order by latest first
+    return render(request, 'app_simple_tournament.html', {
+        'tournaments': tournaments
+    })
 
 def create_tournament(request):
-    """
-    Handles the creation of a new tournament via a POST request.
-    """
-    if request.method == "POST":
-        # Get the tournament name from the form data
-        tournament_name = request.POST.get("tournament_name")
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["POST"])
 
-        # Validate the input
-        if not tournament_name or tournament_name.strip() == "":
-            return HttpResponseBadRequest("Tournament name cannot be empty.")
+    tournament_name = request.POST.get("tournament_name")
 
-        # Check if a tournament with the same name already exists
-        if Tournament.objects.filter(name=tournament_name).exists():
-            return HttpResponseBadRequest("A tournament with this name already exists.")
+    # Validate the tournament name
+    if not tournament_name or tournament_name.strip() == "":
+        return render(request, 'app_simple_tournament.html', {
+            'tournaments': Tournament.objects.all(),
+            'error': "Tournament name cannot be empty."
+        })
 
-        # Create the tournament
-        Tournament.objects.create(name=tournament_name)
-        return HttpResponse(f"Tournament '{tournament_name}' created successfully!")
+    if Tournament.objects.filter(name=tournament_name).exists():
+        return render(request, 'app_simple_tournament.html', {
+            'tournaments': Tournament.objects.all(),
+            'error': "A tournament with this name already exists."
+        })
 
-    # Redirect to the homepage or another appropriate page for non-POST requests
-    return redirect("home")
+    # Create the tournament
+    tournament = Tournament.objects.create(name=tournament_name)
+
+    # Redirect to the same page to display updated list
+    return redirect(reverse('simple_tournament'))

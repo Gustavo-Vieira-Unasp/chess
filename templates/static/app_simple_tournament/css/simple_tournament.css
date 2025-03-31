@@ -5,7 +5,17 @@
   box-sizing: border-box;
 }
 
-/* Container Styling (Now Acts as the Button) */
+
+/* Dashboard Styling */
+.dashboard {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping of tournament containers */
+  gap: 20px; /* Space between containers */
+  justify-content: center; /* Center containers horizontally */
+  padding: 20px; /* Add padding around the dashboard */
+}
+
+/* Main Container (Each Tournament Box) */
 .container {
   width: 300px; /* Fixed width */
   height: 375px; /* Total height */
@@ -15,7 +25,6 @@
   border: 1px solid #ddd; /* Subtle border */
   border-radius: 8px; /* Rounded corners */
   overflow: hidden; /* Ensure content doesn't overflow */
-  margin: 20px auto; /* Center the container horizontally */
   transition: background-color 0.3s ease; /* Smooth transition for hover effect */
   cursor: pointer; /* Pointer cursor for button behavior */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
@@ -25,10 +34,10 @@
   background-color: var(--light-color); /* Change background on hover */
 }
 
-/* Tournament Bracket Section (Top Part) */
+/* Bracket Section (Top Part) */
 .bracket-section {
   flex: 1; /* Takes up remaining space (300x300) */
-  background-color: var(--light-color); /* White background */
+  background-color: var(--main-color); /* White background */
   border-bottom: 1px solid #ddd; /* Separator line */
   display: flex;
   align-items: center; /* Center content vertically */
@@ -36,38 +45,38 @@
   overflow: hidden; /* Ensure SVG stays within bounds */
 }
 
-/* Written Content Section (Bottom Part) */
-.text-section {
-  height: 75px; /* Fixed height for bottom section */
-  background-color: var(--dark-color); /* Dark background for text */
-  color: var(--light-color); /* Light text color */
-  display: flex;
-  align-items: center; /* Center content vertically */
-  justify-content: center; /* Center content horizontally */
-  font-size: 16px;
-  font-weight: 500;
-  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transitions */
+.bracket-section:hover {
+  background-color: var(--light-color);
 }
 
-.text-section:hover {
-  background-color: var(--light-color); /* Change background on hover */
-  color: var(--dark-color); /* Change text color on hover */
-}
-
-/* Hover Effects for SVG Elements */
-.svg-group:hover .team,
-.container:hover .team {
+/* Hover Effects for SVG Elements in Bracket Section */
+.bracket-section:hover .team {
   fill: var(--main-color); /* Change team rectangles to primary color */
 }
 
-.svg-group:hover .line,
-.container:hover .line {
+.bracket-section:hover .line {
   stroke: var(--main-color); /* Change lines to primary color */
 }
 
-.svg-group:hover .match,
-.container:hover .match {
+.bracket-section:hover .match {
   fill: var(--main-color); /* Change match rectangle to primary color */
+}
+
+/* Text Section (Bottom Part) */
+.text-section {
+  height: 75px; /* Fixed height */
+  width: 300px; /* Fixed width */
+  background-color: var(--dark-color); /* Use existing dark color */
+  color: var(--light-color); /* Light text color */
+  display: flex;
+  align-items: center; /* Center items vertically */
+  justify-content: center; /* Center items horizontally */
+  padding: 5px; /* Add padding for spacing */
+  overflow: hidden; /* Prevent overflow */
+}
+
+.text-section .create-btn {
+  font-weight: bold; /* Make "Create" stand out */
 }
 
 /* Modal Styles */
