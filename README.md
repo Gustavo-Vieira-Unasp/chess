@@ -16,3 +16,4 @@ V.:
   -0.0.0.0.0.0.0.0.013 (commit cleaning)
   -0.0.0.0.0.0.0.0.014 (readme update, fix)
   -0.0.0.0.0.0.0.0.015 (generic tournaments placeholder)
+  -0.0.0.0.0.0.0.0.015.1 (placeholder upgrade)

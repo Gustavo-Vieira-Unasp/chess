@@ -31,11 +31,6 @@ Simple Tournament
     <!-- Dynamically Generated Tournament Containers -->
     {% for tournament in tournaments %}
         <div class="container" onclick="location.href='#'">
-            <!-- Tournament Bracket Section -->
-            <div class="bracket-section">
-                {% include 'app_simple_tournament/svg/tournament_bracket.html' %}
-            </div>
-
             <!-- Text Section with Tournament Name -->
             <div class="text-section">
                 {{ tournament.name }}
