@@ -15,8 +15,9 @@
   padding: 20px; /* Add padding around the dashboard */
 }
 
-/* Main Container (Each Tournament Box) */
+/* General Container Styling */
 .container {
+  position: relative; /* Required for absolute positioning of child elements */
   width: 300px; /* Fixed width */
   height: 375px; /* Total height */
   display: flex;
@@ -92,7 +93,7 @@
 }
 
 .modal-content {
-  background-color: white;
+  background-color: var(--main-color);
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
@@ -113,4 +114,30 @@
 .close:focus {
   color: black;
   text-decoration: none;
+}
+
+/* Delete Option (Trash Can Icon) */
+.delete-option {
+  position: absolute; /* Position relative to the container */
+  top: 10px; /* Distance from the top */
+  right: 10px; /* Distance from the right */
+  display: none; /* Hidden by default */
+  background-color: var(--main-color);
+  border: 1px solid #ddd;
+  border-radius: 4px; /* Rounded corners */
+  padding: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  z-index: 10; /* Ensure it appears above other elements */
+}
+
+.container:hover .delete-option {
+  display: block; /* Show on hover */
+}
+
+/* Delete Button Styling */
+.delete-button {
+  background: none; /* Remove default button background */
+  border: none; /* Remove default button border */
+  cursor: pointer; /* Pointer cursor for clickable behavior */
+  padding: 0; /* Remove default padding */
 }

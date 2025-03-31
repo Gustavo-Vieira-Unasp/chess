@@ -1,11 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseNotAllowed
 from django.urls import reverse
 from .models import Tournament
 
 def simple_tournament(request):
-    # Query all tournaments from the database
-    tournaments = Tournament.objects.all().order_by('-id')  # Order by latest first
+    tournaments = Tournament.objects.all().order_by('-id')
     return render(request, 'app_simple_tournament.html', {
         'tournaments': tournaments
     })
@@ -16,7 +15,6 @@ def create_tournament(request):
 
     tournament_name = request.POST.get("tournament_name")
 
-    # Validate the tournament name
     if not tournament_name or tournament_name.strip() == "":
         return render(request, 'app_simple_tournament.html', {
             'tournaments': Tournament.objects.all(),
@@ -29,8 +27,15 @@ def create_tournament(request):
             'error': "A tournament with this name already exists."
         })
 
-    # Create the tournament
     tournament = Tournament.objects.create(name=tournament_name)
 
-    # Redirect to the same page to display updated list
+    return redirect(reverse('simple_tournament'))
+
+def delete_tournament(request, tournament_id):
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["POST"])
+
+    tournament = get_object_or_404(Tournament, id=tournament_id)
+    tournament.delete()
+
     return redirect(reverse('simple_tournament'))

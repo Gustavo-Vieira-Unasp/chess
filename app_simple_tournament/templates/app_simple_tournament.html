@@ -28,30 +28,40 @@ Simple Tournament
         </div>
     </div>
 
-    <!-- Dynamically Generated Tournament Containers -->
-    {% for tournament in tournaments %}
-        <div class="container" onclick="location.href='#'">
-            <!-- Text Section with Tournament Name -->
-            <div class="text-section">
-                {{ tournament.name }}
-            </div>
+<!-- Dynamically Generated Tournament Containers -->
+{% for tournament in tournaments %}
+    <div class="container" onclick="location.href='#'" onmouseover="showDeleteOption(this)" onmouseout="hideDeleteOption(this)">
+        <!-- Delete Option (Trash Can Icon) -->
+        <div class="delete-option">
+            <form action="{% url 'delete_tournament' tournament.id %}" method="POST" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="delete-button">
+                    <i class='bx bx-trash' style="font-size: 20px; color: red;"></i>
+                </button>
+            </form>
         </div>
-    {% endfor %}
+
+        <!-- Text Section with Tournament Name -->
+        <div class="text-section">
+            {{ tournament.name }}
+        </div>
+    </div>
+{% endfor %}
 </div>
 
 <!-- The Modal -->
 <div id="tournamentModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-        <h2>Create Tournament</h2>
+        <h2>Criar Torneio</h2>
         {% if error %}
             <p style="color: red;">{{ error }}</p>
         {% endif %}
         <form id="tournamentForm" method="POST" action="{% url 'create_tournament' %}">
             {% csrf_token %}
-            <label for="tournament_name">Tournament Name:</label>
+            <label for="tournament_name">Nome do Torneio:</label>
             <input type="text" id="tournament_name" name="tournament_name" required>
-            <button type="submit">Submit</button>
+            <button type="submit">Criar</button>
         </form>
     </div>
 </div>

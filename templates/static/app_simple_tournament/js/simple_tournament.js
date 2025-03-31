@@ -28,3 +28,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+function showDeleteOption(container) {
+    const deleteOption = container.querySelector('.delete-option');
+    deleteOption.style.display = 'block';
+}
+
+function hideDeleteOption(container) {
+    const deleteOption = container.querySelector('.delete-option');
+    deleteOption.style.display = 'none';
+}
