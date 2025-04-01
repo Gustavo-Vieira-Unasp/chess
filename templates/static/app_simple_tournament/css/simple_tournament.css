@@ -5,7 +5,6 @@
   box-sizing: border-box;
 }
 
-
 /* Dashboard Styling */
 .dashboard {
   display: flex;
@@ -17,7 +16,7 @@
 
 /* General Container Styling */
 .container {
-  position: relative; /* Required for absolute positioning of child elements */
+  position: relative;
   width: 300px; /* Fixed width */
   height: 375px; /* Total height */
   display: flex;
@@ -97,9 +96,9 @@
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 300px;
-  border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add subtle shadow */
+  width: 600px; /* Increased width for better spacing */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .close {
@@ -140,4 +139,33 @@
   border: none; /* Remove default button border */
   cursor: pointer; /* Pointer cursor for clickable behavior */
   padding: 0; /* Remove default padding */
+}
+
+/* Style for Tournament Date */
+.tournament-date {
+  font-size: 14px;
+  color: #555;
+  margin-top: 5px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px; /* Space between fields */
+  align-items: flex-start; /* Align fields at the top */
+}
+
+.form-group {
+  flex: 1; /* Equal width for both fields */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
 }

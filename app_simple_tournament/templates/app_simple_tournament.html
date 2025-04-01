@@ -12,7 +12,6 @@ Simple Tournament
 {% endblock %}
 
 <!-- Dashboard Block: Main Content -->
-<!-- Dashboard Block: Main Content -->
 {% block 'dashboard' %}
 <div class="dashboard">
     <!-- First Container: Create Tournament -->
@@ -28,8 +27,8 @@ Simple Tournament
         </div>
     </div>
 
-<!-- Dynamically Generated Tournament Containers -->
-{% for tournament in tournaments %}
+    <!-- Dynamically Generated Tournament Containers -->
+    {% for tournament in tournaments %}
     <div class="container" onclick="location.href='#'" onmouseover="showDeleteOption(this)" onmouseout="hideDeleteOption(this)">
         <!-- Delete Option (Trash Can Icon) -->
         <div class="delete-option">
@@ -40,32 +39,43 @@ Simple Tournament
                 </button>
             </form>
         </div>
-
-        <!-- Text Section with Tournament Name -->
+    
+        <!-- Text Section with Tournament Name and Date -->
         <div class="text-section">
-            {{ tournament.name }}
+            <div class="tournament-name">{{ tournament.name }}</div>
+            <div class="tournament-date">- {{ tournament.date }}</div>
         </div>
     </div>
-{% endfor %}
+        </div>
+    {% endfor %}
 </div>
 
 <!-- The Modal -->
 <div id="tournamentModal" class="modal">
     <div class="modal-content">
-        <span class="close">&times;</span>
+        <span class="close" onclick="document.getElementById('tournamentModal').style.display='none'">&times;</span>
         <h2>Criar Torneio</h2>
         {% if error %}
             <p style="color: red;">{{ error }}</p>
         {% endif %}
         <form id="tournamentForm" method="POST" action="{% url 'create_tournament' %}">
             {% csrf_token %}
-            <label for="tournament_name">Nome do Torneio:</label>
-            <input type="text" id="tournament_name" name="tournament_name" required>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="tournament_name">Nome do Torneio:</label>
+                    <input type="text" id="tournament_name" name="tournament_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="tournament_date">Data do Torneio:</label>
+                    <input type="date" id="tournament_date" name="tournament_date" required>
+                </div>
+            </div>
             <button type="submit">Criar</button>
         </form>
     </div>
 </div>
 {% endblock %}
+
 <!-- Body Block: JavaScript -->
 {% block 'body' %}
 <script src="{% static 'app_simple_tournament/js/simple_tournament.js' %}"></script>

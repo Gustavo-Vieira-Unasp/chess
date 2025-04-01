@@ -3,7 +3,7 @@
 
 <!-- Title Block -->
 {% block 'title' %}
-simple_tournament
+Simple Tournament - {{ tournament.name }}
 {% endblock %}
 
 <!-- Head Block: CSS and Meta Tags -->
@@ -14,11 +14,29 @@ simple_tournament
 <!-- Dashboard Block: Main Content -->
 {% block 'dashboard' %}
 <div class="dashboard">
-<body>
-    <h1>{{ message }}</h1>
-    <p><strong>Tournament Name:</strong> {{ tournament_name }}</p>
-    <a href="{% url 'home' %}">Return to Home</a>
-</body>
+    <!-- Tournament Details Section -->
+    <div class="tournament-container">
+        <!-- Tournament Name -->
+        <h1 class="tournament-name">{{ tournament.name }}</h1>
+
+        <!-- Tournament Description -->
+        {% if tournament.description %}
+            <p class="tournament-description">{{ tournament.description }}</p>
+        {% else %}
+            <p>No description available.</p>
+        {% endif %}
+
+        <!-- Tournament Link -->
+        {% if tournament.link %}
+            <a href="{{ tournament.link }}" class="tournament-link">View More Details</a>
+        {% else %}
+            <p>No additional details available.</p>
+        {% endif %}
+
+        <!-- Return to Home -->
+        <div class="return-home">
+            <a href="{% url 'home' %}">Return to Home</a>
+        </div>
+    </div>
 </div>
-</html>
 {% endblock %}

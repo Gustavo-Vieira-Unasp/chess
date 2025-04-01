@@ -18,3 +18,4 @@ V.:
   -0.0.0.0.0.0.0.0.015 (generic tournaments placeholder)
   -0.0.0.0.0.0.0.0.015.1 (placeholder upgrade)
   -0.0.0.0.0.0.0.0.016 (delete way)
+  -0.0.0.0.0.0.0.0.017 (name/date)
