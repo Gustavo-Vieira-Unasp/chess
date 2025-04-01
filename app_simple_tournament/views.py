@@ -51,6 +51,5 @@ def delete_tournament(request, tournament_id):
     return redirect(reverse('simple_tournament'))
 
 def page_simple_tournament(request, tournament_name):
-    tournament = get_object_or_404(tournament, name__iexact=tournament_name)
-
+    tournament = get_object_or_404(Tournament, name__iexact=tournament_name)
     return render(request, 'page_simple_tournament.html', {'tournament': tournament})

@@ -69,10 +69,25 @@
   background-color: var(--dark-color); /* Use existing dark color */
   color: var(--light-color); /* Light text color */
   display: flex;
-  align-items: center; /* Center items vertically */
-  justify-content: center; /* Center items horizontally */
-  padding: 5px; /* Add padding for spacing */
+  flex-direction: column; /* Stack children vertically */
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
+  padding: 10px; /* Add padding for spacing */
   overflow: hidden; /* Prevent overflow */
+  text-align: center; /* Ensure text inside child elements is centered */
+}
+
+.tournament-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px; /* Adds space between the name and date */
+  white-space: normal; /* Allow text to wrap */
+  word-wrap: break-word; /* Break long words if necessary */
+}
+
+.tournament-date {
+  font-size: 14px;
+  color: #666;
 }
 
 .text-section .create-btn {
@@ -141,13 +156,7 @@
   padding: 0; /* Remove default padding */
 }
 
-/* Style for Tournament Date */
-.tournament-date {
-  font-size: 14px;
-  color: #555;
-  margin-top: 5px;
-}
-
+/* Form Row Styling */
 .form-row {
   display: flex;
   gap: 20px; /* Space between fields */
@@ -168,4 +177,14 @@
   width: 100%;
   padding: 8px;
   box-sizing: border-box;
+}
+
+.tournament-link-container {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.tournament-link-container:hover {
+  background-color: #f0f0f0; /* Highlight on hover */
 }

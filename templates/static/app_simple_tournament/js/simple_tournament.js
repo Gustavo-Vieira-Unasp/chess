@@ -38,3 +38,20 @@ function hideDeleteOption(container) {
     const deleteOption = container.querySelector('.delete-option');
     deleteOption.style.display = 'none';
 }
+
+function shareTournament() {
+    if (navigator.share) {
+        navigator.share({
+            title: '{{ tournament.name }}',
+            url: window.location.href,
+        }).catch((error) => console.log('Error sharing:', error));
+    } else {
+        alert('Sharing is not supported in this browser.');
+    }
+}
+
+document.querySelectorAll('.delete-button').forEach(button => {
+    button.addEventListener('click', (event) => {
+        event.stopPropagation(); // Prevent click from triggering the parent link
+    });
+});

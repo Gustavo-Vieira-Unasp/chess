@@ -3,7 +3,7 @@
 
 <!-- Title Block -->
 {% block 'title' %}
-Simple Tournament
+Torneio Simples
 {% endblock %}
 
 <!-- Head Block: CSS and Meta Tags -->
@@ -29,24 +29,25 @@ Simple Tournament
 
     <!-- Dynamically Generated Tournament Containers -->
     {% for tournament in tournaments %}
-    <div class="container" onclick="location.href='#'" onmouseover="showDeleteOption(this)" onmouseout="hideDeleteOption(this)">
-        <!-- Delete Option (Trash Can Icon) -->
-        <div class="delete-option">
-            <form action="{% url 'delete_tournament' tournament.id %}" method="POST" style="display: inline;">
-                {% csrf_token %}
-                <button type="submit" class="delete-button">
-                    <i class='bx bx-trash' style="font-size: 20px; color: red;"></i>
-                </button>
-            </form>
+    <a href="{% url 'page_simple_tournament' tournament.name %}" class="tournament-link-container">
+        <div class="container" onmouseover="showDeleteOption(this)" onmouseout="hideDeleteOption(this)">
+            <!-- Delete Option (Trash Can Icon) -->
+            <div class="delete-option">
+                <form action="{% url 'delete_tournament' tournament.id %}" method="POST" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-button">
+                        <i class='bx bx-trash' style="font-size: 20px; color: red;"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Text Section with Tournament Name and Date -->
+            <div class="text-section" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px;">
+                <div class="tournament-name" style="font-size: 18px; font-weight: bold; margin-bottom: 5px;">{{ tournament.name }}</div>
+                <div class="tournament-date" style="font-size: 14px; color: #666;">{{ tournament.date }}</div>
+            </div>
         </div>
-    
-        <!-- Text Section with Tournament Name and Date -->
-        <div class="text-section">
-            <div class="tournament-name">{{ tournament.name }}</div>
-            <div class="tournament-date">- {{ tournament.date }}</div>
-        </div>
-    </div>
-        </div>
+    </a>
     {% endfor %}
 </div>
 

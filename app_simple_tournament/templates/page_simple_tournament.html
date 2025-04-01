@@ -9,6 +9,10 @@ Simple Tournament - {{ tournament.name }}
 <!-- Head Block: CSS and Meta Tags -->
 {% block 'head' %}
 <link rel="stylesheet" href="{% static 'app_simple_tournament/css/simple_tournament.css' %}">
+<meta name="description" content="{{ tournament.description|default:'Details about the tournament.' }}">
+<meta property="og:title" content="{{ tournament.name }}">
+<meta property="og:description" content="{{ tournament.description|default:'Details about the tournament.' }}">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
 {% endblock %}
 
 <!-- Dashboard Block: Main Content -->

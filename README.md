@@ -19,3 +19,4 @@ V.:
   -0.0.0.0.0.0.0.0.015.1 (placeholder upgrade)
   -0.0.0.0.0.0.0.0.016 (delete way)
   -0.0.0.0.0.0.0.0.017 (name/date)
+  -0.0.0.0.0.0.0.0.018 (tournament page)
