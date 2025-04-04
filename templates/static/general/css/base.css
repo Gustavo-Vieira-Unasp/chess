@@ -27,20 +27,29 @@
   height: 60px;
   display: flex;
   align-items: center;
+  gap: 10px; /* Add spacing between logo and text */
   position: relative;
 }
-.sidebar .logo-details .icon {
-  opacity: 0; /* Hidden by default */
+
+/* Logo image styling */
+.sidebar .logo-details .logo_image {
+  width: 40px; /* Fixed width for the logo */
+  height: 40px; /* Fixed height for the logo */
+  object-fit: contain; /* Ensure the logo scales properly */
+  flex-shrink: 0; /* Prevent the logo from shrinking */
+  opacity: 1; /* Always visible */
   transition: all var(--transition-speed) ease;
 }
+
+/* Logo name styling */
 .sidebar .logo-details .logo_name {
   color: #fff; /* White text color */
   font-size: 20px;
   font-weight: 600;
   opacity: 0; /* Hidden by default */
+  white-space: nowrap; /* Prevent text wrapping */
   transition: all var(--transition-speed) ease;
 }
-.sidebar.open .logo-details .icon,
 .sidebar.open .logo-details .logo_name {
   opacity: 1; /* Visible when sidebar is open */
 }

@@ -9,6 +9,10 @@
     <meta name="keywords" content="chess">
     <meta name="author" content="Gustavo Vieira">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{% static 'general/svg/logo.svg' %}">
+    <link rel="alternate icon" type="image/x-icon" href="{% static 'general/images/favicon.ico' %}">
+
     <!-- Font Import -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
 
@@ -27,7 +31,9 @@
     <!-- Sidebar -->
     <div id="sidebar" class="sidebar">
         <div class="logo-details">
-            <a href={% url 'home' %} class="logo_link">
+            <a href="{% url 'home' %}" class="logo_link">
+                <!-- External SVG Logo -->
+                <img src="{% static 'general/svg/logo.svg' %}" alt="Logo" class="logo_image">
                 <div class="logo_name">LOGO</div>
             </a>
             <i class='bx bx-menu' id="btn"></i>
