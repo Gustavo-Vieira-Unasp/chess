@@ -27,8 +27,32 @@
   height: 60px;
   display: flex;
   align-items: center;
-  gap: 10px; /* Add spacing between logo and text */
+  gap: 10px; /* Reduced spacing to avoid overflow */
   position: relative;
+}
+.sidebar.open .logo-details {
+  gap: 100px; /* Larger spacing when open */
+}
+
+/* Logo box styling */
+.sidebar .logo-details .logo-box {
+  width: 0; /* Hidden by default */
+  height: 0;
+  opacity: 0; /* Fully transparent */
+  overflow: hidden; /* Prevents content from overflowing */
+  transition: all var(--transition-speed) ease; /* Smooth transition */
+  display: none; /* Hidden by default */
+}
+.sidebar.open .logo-details .logo-box {
+  display: flex; /* Show the box when open */
+  width: 50px; /* Set a fixed width for the box */
+  height: 50px; /* Set a fixed height for the box */
+  opacity: 1; /* Fully visible */
+  align-items: center;
+  justify-content: center;
+  background: #fff; /* Background color for the box */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
 }
 
 /* Logo image styling */
@@ -36,22 +60,13 @@
   width: 40px; /* Fixed width for the logo */
   height: 40px; /* Fixed height for the logo */
   object-fit: contain; /* Ensure the logo scales properly */
-  flex-shrink: 0; /* Prevent the logo from shrinking */
-  opacity: 1; /* Always visible */
-  transition: all var(--transition-speed) ease;
-}
-
-/* Logo name styling */
-.sidebar .logo-details .logo_name {
-  color: #fff; /* White text color */
-  font-size: 20px;
-  font-weight: 600;
+  transition: all var(--transition-speed) ease; /* Smooth transition */
   opacity: 0; /* Hidden by default */
-  white-space: nowrap; /* Prevent text wrapping */
-  transition: all var(--transition-speed) ease;
+  visibility: hidden; /* Fully invisible */
 }
-.sidebar.open .logo-details .logo_name {
-  opacity: 1; /* Visible when sidebar is open */
+.sidebar.open .logo-details .logo_image {
+  opacity: 1; /* Fully visible */
+  visibility: visible; /* Make it visible */
 }
 
 /* Hamburger/Close button */
@@ -223,14 +238,14 @@
   border-radius: 6px;
   margin-right: 10px;
 }
-.sidebar li.profile .name,
-.sidebar li.profile .job {
+.sidebar li profile .name,
+.sidebar li profile .job {
   font-size: 15px;
   font-weight: 400;
   color: #fff;
   white-space: nowrap;
 }
-.sidebar li.profile .job {
+.sidebar li profile .job {
   font-size: 12px;
 }
 .sidebar .profile #log_out {
@@ -292,5 +307,13 @@
   }
   .sidebar li .tooltip {
     display: none; /* Hide tooltips on small screens */
+  }
+  .sidebar.open .logo-details .logo-box {
+    width: 40px; /* Smaller box size */
+    height: 40px;
+  }
+  .sidebar .logo-details .logo_image {
+    width: 30px; /* Smaller logo size */
+    height: 30px;
   }
 }

@@ -1,14 +1,20 @@
-    const btn = document.querySelector("#btn");
-    const sidebar = document.querySelector(".sidebar");
+// Sidebar toggle functionality
+const btn = document.querySelector("#btn");
+const sidebar = document.querySelector(".sidebar");
 
-    btn.addEventListener("click", () => {
-      sidebar.classList.toggle("open");
+btn.addEventListener("click", () => {
+  // Toggle the 'open' class on the sidebar
+  sidebar.classList.toggle("open");
 
-      if (sidebar.classList.contains("open")) {
-        btn.classList.remove("bx-menu");
-        btn.classList.add("bx-x");
-      } else {
-        btn.classList.remove("bx-x");
-        btn.classList.add("bx-menu");
-      }
-    })
+  // Update the button icon based on the sidebar state
+  const isSidebarOpen = sidebar.classList.contains("open");
+  btn.setAttribute("aria-expanded", isSidebarOpen);
+
+  if (isSidebarOpen) {
+    btn.classList.remove("bx-menu");
+    btn.classList.add("bx-x"); // Change to close icon
+  } else {
+    btn.classList.remove("bx-x");
+    btn.classList.add("bx-menu"); // Change back to menu icon
+  }
+});
