@@ -1,57 +1,49 @@
-// Wait for the DOM to fully load
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
     const modal = document.getElementById("tournamentModal");
     const btn = document.getElementById("createTournamentBtn");
-    const span = document.getElementsByClassName("close")[0];
+    const span = document.querySelector(".close");
 
-    // Modal Functions
+    if (!modal || !btn || !span) return console.error("Required elements not found!");
+
     const showModal = () => {
-        if (modal) {
-            modal.style.display = "block";
-            document.getElementById("tournament_name").focus(); // Focus on the input field
-        }
-    };
-    const hideModal = () => modal && (modal.style.display = "none");
-
-    // Event Listeners
-    if (btn) btn.onclick = showModal;
-    if (span) span.onclick = hideModal;
-
-    window.onclick = function (event) {
-        if (modal && event.target === modal) hideModal();
+        modal.classList.add("show");
+        modal.setAttribute("aria-hidden", "false");
+        document.getElementById("tournament_name")?.focus();
     };
 
-    // Close modal with Escape key
-    document.addEventListener("keydown", function (e) {
-        if (e.key === "Escape" && modal && modal.style.display === "block") {
-            hideModal();
+    const hideModal = () => {
+        modal.classList.remove("show");
+        modal.setAttribute("aria-hidden", "true");
+        btn.focus();
+    };
+
+    btn.addEventListener("click", showModal);
+    span.addEventListener("click", hideModal);
+
+    window.addEventListener("click", (event) => {
+        if (event.target === modal) hideModal();
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modal.classList.contains("show")) hideModal();
+    });
+
+    // Hover effects for delete options
+    document.querySelectorAll('.container').forEach(container => {
+        container.addEventListener('mouseenter', () => toggleDeleteOption(container, true));
+        container.addEventListener('mouseleave', () => toggleDeleteOption(container, false));
+    });
+
+    // Event delegation for delete buttons
+    document.addEventListener('click', (event) => {
+        if (event.target.matches('.delete-button')) {
+            event.stopPropagation();
+            console.log('Delete button clicked');
         }
     });
 });
 
-function showDeleteOption(container) {
+function toggleDeleteOption(container, show = true) {
     const deleteOption = container.querySelector('.delete-option');
-    deleteOption.style.display = 'block';
+    if (deleteOption) deleteOption.classList.toggle('hidden', !show);
 }
-
-function hideDeleteOption(container) {
-    const deleteOption = container.querySelector('.delete-option');
-    deleteOption.style.display = 'none';
-}
-
-function shareTournament() {
-    if (navigator.share) {
-        navigator.share({
-            title: '{{ tournament.name }}',
-            url: window.location.href,
-        }).catch((error) => console.log('Error sharing:', error));
-    } else {
-        alert('Sharing is not supported in this browser.');
-    }
-}
-
-document.querySelectorAll('.delete-button').forEach(button => {
-    button.addEventListener('click', (event) => {
-        event.stopPropagation(); // Prevent click from triggering the parent link
-    });
-});

@@ -1,50 +1,49 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static i18n %}
 
 <!-- Title Block -->
 {% block 'title' %}
-Torneio Simples
+{{ block.super }} - {% trans "Torneio Simples" %}
 {% endblock %}
 
 <!-- Head Block: CSS and Meta Tags -->
 {% block 'head' %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="{% static 'app_simple_tournament/css/simple_tournament.css' %}">
+<link rel="icon" href="{% static 'app_simple_tournament/images/favicon.ico' %}" type="image/x-icon">
 {% endblock %}
 
 <!-- Dashboard Block: Main Content -->
 {% block 'dashboard' %}
 <div class="dashboard">
     <!-- First Container: Create Tournament -->
-    <div class="container" id="createTournamentBtn" onclick="document.getElementById('tournamentModal').style.display='block'">
-        <!-- Tournament Bracket Section -->
+    <div class="container" id="createTournamentBtn" role="button" tabindex="0">
         <div class="bracket-section">
             {% include 'app_simple_tournament/svg/tournament_bracket.html' %}
         </div>
-
-        <!-- Text Section with "Create" Button -->
         <div class="text-section">
-            <div class="create-btn">Criar Torneio Simples</div>
+            <div class="create-btn">{% trans "Criar Torneio Simples" %}</div>
         </div>
     </div>
 
     <!-- Dynamically Generated Tournament Containers -->
     {% for tournament in tournaments %}
     <a href="{% url 'page_simple_tournament' tournament.name %}" class="tournament-link-container">
-        <div class="container" onmouseover="showDeleteOption(this)" onmouseout="hideDeleteOption(this)">
+        <div class="container" data-tournament-id="{{ tournament.id }}" onmouseover="toggleDeleteOption(this, true)" onmouseout="toggleDeleteOption(this, false)">
             <!-- Delete Option (Trash Can Icon) -->
-            <div class="delete-option">
+            <div class="delete-option hidden">
                 <form action="{% url 'delete_tournament' tournament.id %}" method="POST" style="display: inline;">
                     {% csrf_token %}
-                    <button type="submit" class="delete-button">
-                        <i class='bx bx-trash' style="font-size: 20px; color: red;"></i>
+                    <button type="submit" class="delete-button" aria-label="{% trans 'Excluir torneio' %}">
+                        <i class='bx bx-trash'></i>
                     </button>
                 </form>
             </div>
 
             <!-- Text Section with Tournament Name and Date -->
-            <div class="text-section" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px;">
-                <div class="tournament-name" style="font-size: 18px; font-weight: bold; margin-bottom: 5px;">{{ tournament.name }}</div>
-                <div class="tournament-date" style="font-size: 14px; color: #666;">{{ tournament.date }}</div>
+            <div class="text-section">
+                <div class="tournament-name">{{ tournament.name }}</div>
+                <div class="tournament-date">{{ tournament.date }}</div>
             </div>
         </div>
     </a>
@@ -54,27 +53,24 @@ Torneio Simples
 <!-- The Modal -->
 <div id="tournamentModal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="document.getElementById('tournamentModal').style.display='none'">&times;</span>
-        <h2>Criar Torneio</h2>
-        {% if error %}
-            <p style="color: red;">{{ error }}</p>
-        {% endif %}
-        <form id="tournamentForm" method="POST" action="{% url 'create_tournament' %}">
-            {% csrf_token %}
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="tournament_name">Nome do Torneio:</label>
-                    <input type="text" id="tournament_name" name="tournament_name" required>
-                </div>
-                <div class="form-group">
-                    <label for="tournament_date">Data do Torneio:</label>
-                    <input type="date" id="tournament_date" name="tournament_date" required>
-                </div>
-            </div>
-            <button type="submit">Criar</button>
-        </form>
+      <span class="close" onclick="document.getElementById('tournamentModal').style.display='none'">&times;</span>
+      <h2>Criar Torneio</h2>
+      <form id="tournamentForm" method="POST" action="{% url 'create_tournament' %}">
+        {% csrf_token %}
+        <div class="form-row">
+          <div class="form-group">
+            <label for="tournament_name">Nome do Torneio:</label>
+            <input type="text" id="tournament_name" name="tournament_name" required>
+          </div>
+          <div class="form-group">
+            <label for="tournament_date">Data do Torneio:</label>
+            <input type="date" id="tournament_date" name="tournament_date" required>
+          </div>
+        </div>
+        <button type="submit">Criar</button>
+      </form>
     </div>
-</div>
+  </div>
 {% endblock %}
 
 <!-- Body Block: JavaScript -->

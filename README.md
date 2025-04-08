@@ -22,3 +22,4 @@ V.:
   -0.0.0.0.0.0.0.0.018 (tournament page)
   -0.0.0.0.0.0.0.0.019 (logo saga)
   -0.0.0.0.0.0.0.0.020 (logo ajustments)
+  -0.0.0.0.0.0.0.0.021 (roundier input *asking help)
