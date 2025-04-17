@@ -19,17 +19,18 @@
 /* General Container Styling */
 .container {
   position: relative;
-  min-width: 300px;
-  height: 375px;
+  width: 300px; /* Fixed width */
+  height: 375px; /* Fixed height */
   display: flex;
   flex-direction: column;
   background-color: var(--main-color);
   border: 1px solid #ddd;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: hidden; /* Prevent content from overflowing */
   transition: background-color 0.3s ease;
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box; /* Include padding and borders in dimensions */
 }
 
 .container:hover {
@@ -38,36 +39,42 @@
 
 /* Bracket Section (Top Part) */
 .bracket-section {
-  flex: 1;
+  flex: 1; /* Take up remaining space */
   background-color: var(--main-color);
   border-bottom: 1px solid #ddd;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: hidden; /* Prevent overflow */
+}
+
+.bracket-section .team,
+.bracket-section .line,
+.bracket-section .match {
+  fill: #ccc;
+  stroke: #ccc;
 }
 
 .bracket-section:hover {
   background-color: var(--light-color);
 }
 
-/* Hover Effects for SVG Elements in Bracket Section */
 .bracket-section:hover .team {
-  fill: var(--main-color); /* Change team rectangles to primary color */
+  fill: var(--main-color);
 }
 
 .bracket-section:hover .line {
-  stroke: var(--main-color); /* Change lines to primary color */
+  stroke: var(--main-color);
 }
 
 .bracket-section:hover .match {
-  fill: var(--main-color); /* Change match rectangle to primary color */
+  fill: var(--main-color);
 }
 
 /* Text Section (Bottom Part) */
 .text-section {
-  height: 75px;
-  width: 100%;
+  height: 75px; /* Fixed height */
+  width: 100%; /* Full width of the container */
   background-color: var(--dark-color);
   color: var(--light-color);
   display: flex;
@@ -75,8 +82,8 @@
   align-items: center;
   justify-content: center;
   padding: 10px;
-  overflow: hidden;
   text-align: center;
+  box-sizing: border-box; /* Include padding in dimensions */
 }
 
 .tournament-name {
@@ -108,19 +115,19 @@
   padding: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   z-index: 10;
+  box-sizing: border-box; /* Include padding and borders in dimensions */
 }
 
 .delete-option.hidden {
   display: none;
 }
 
-.delete-option.visible {
+.delete-option:not(.hidden) {
   display: block;
 }
 
 /* Modal Styles */
 .modal {
-  display: none;
   position: fixed;
   z-index: 1;
   left: 0;
@@ -128,10 +135,14 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .modal.show {
-  display: block;
+  opacity: 1;
+  visibility: visible;
 }
 
 .modal-content {
@@ -178,48 +189,64 @@
 /* General Input Field Styling */
 .form-group input {
   width: 100%;
-  padding: 12px; /* Slightly larger padding for better spacing */
-  font-size: 16px; /* Larger font size for readability */
-  border: 2px solid #ddd; /* Thicker border for emphasis */
-  border-radius: 20px; /* Rounded corners for a "roundier" look */
+  padding: 12px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
   box-sizing: border-box;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Hover State */
 .form-group input:hover {
-  border-color: var(--main-color); /* Highlight border on hover */
+  border-color: var(--main-color);
 }
 
-/* Focus State */
 .form-group input:focus {
-  border-color: var(--main-color); /* Highlight border on focus */
-  outline: none; /* Remove default browser outline */
-  box-shadow: 0 0 8px rgba(76, 175, 80, 0.3); /* Subtle glow effect */
+  border-color: var(--main-color);
+  outline: none;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
 }
 
-/* Explicitly Targeting the "Name" Input */
-#tournament_name {
-  width: 100%;
-  padding: 12px; /* Consistent padding */
-  font-size: 16px; /* Consistent font size */
-  border: 2px solid #ddd; /* Consistent border */
-  border-radius: 20px !important; /* Ensure rounded corners (override conflicts) */
-  box-sizing: border-box;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+.error-message {
+  color: red;
+  display: none;
+  font-size: 12px;
+  margin-top: 5px;
 }
 
-#tournament_name:hover {
-  border-color: var(--main-color); /* Highlight border on hover */
+/* Styling for the Delete Button */
+.delete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: red;
+  font-size: 20px;
+  transition: color 0.3s ease;
+  position: relative;
 }
 
-#tournament_name:focus {
-  border-color: var(--main-color); /* Highlight border on focus */
-  outline: none; /* Remove default browser outline */
-  box-shadow: 0 0 8px rgba(76, 175, 80, 0.3); /* Subtle glow effect */
+.delete-button:focus {
+  outline: 2px solid var(--main-color);
+  outline-offset: 2px;
 }
 
-/* Error State (Optional) */
-.form-group.error input {
-  border-color: red; /* Red border for errors */
+.delete-button:hover {
+  color: darkred;
+}
+
+.delete-button::after {
+  content: "Delete";
+  font-size: 12px;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.delete-button:hover::after {
+  opacity: 1;
 }

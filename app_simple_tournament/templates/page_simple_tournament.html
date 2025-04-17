@@ -3,12 +3,12 @@
 
 <!-- Title Block -->
 {% block 'title' %}
-Simple Tournament - {{ tournament.name }}
+{{ tournament.name }} - Torneio simples
 {% endblock %}
 
 <!-- Head Block: CSS and Meta Tags -->
 {% block 'head' %}
-<link rel="stylesheet" href="{% static 'app_simple_tournament/css/simple_tournament.css' %}">
+<link rel="stylesheet" href="{% static 'app_simple_tournament/css/simple_tournament_page.css' %}">
 <meta name="description" content="{{ tournament.description|default:'Details about the tournament.' }}">
 <meta property="og:title" content="{{ tournament.name }}">
 <meta property="og:description" content="{{ tournament.description|default:'Details about the tournament.' }}">
@@ -18,29 +18,35 @@ Simple Tournament - {{ tournament.name }}
 <!-- Dashboard Block: Main Content -->
 {% block 'dashboard' %}
 <div class="dashboard">
+    <!-- Top Bar with Tournament Name -->
+    <div class="top-bar">
+        {{ tournament.name }}
+    </div>
+
     <!-- Tournament Details Section -->
     <div class="tournament-container">
-        <!-- Tournament Name -->
-        <h1 class="tournament-name">{{ tournament.name }}</h1>
-
-        <!-- Tournament Description -->
-        {% if tournament.description %}
-            <p class="tournament-description">{{ tournament.description }}</p>
-        {% else %}
-            <p>No description available.</p>
-        {% endif %}
+        <!-- Description Container -->
+        <div class="description-container">
+            <p class="description-text" id="descriptionText">{{ tournament.description|default:"Edite a descrição do torneio" }}</p>
+            <button class="edit-button" id="editButton">&#9998;</button> <!-- Pencil icon -->
+            <textarea class="editable-input" id="editableInput">{{ tournament.description|default:"Edite a descrição do torneio" }}</textarea>
+            <form id="saveForm" method="POST" action="{% url 'update_tournament_description' tournament.id %}">
+                {% csrf_token %}
+                <input type="hidden" id="hiddenDescription" name="description" value="{{ tournament.description|default:'Edit description here...' }}">
+                <button type="submit" class="save-button" id="saveButton">Save</button> <!-- Save button -->
+            </form>
+        </div>
 
         <!-- Tournament Link -->
         {% if tournament.link %}
-            <a href="{{ tournament.link }}" class="tournament-link">View More Details</a>
+            <a href="{{ tournament.link }}" class="tournament-link">Mais detalhes...</a>
         {% else %}
-            <p>No additional details available.</p>
+            <p>Sem mais detalhes disponíveis</p>
         {% endif %}
-
-        <!-- Return to Home -->
-        <div class="return-home">
-            <a href="{% url 'home' %}">Return to Home</a>
-        </div>
+        
     </div>
 </div>
+
+<!-- JavaScript Import -->
+<script src="{% static 'app_simple_tournament/js/simple_tournament_page.js' %}"></script>
 {% endblock %}

@@ -53,3 +53,12 @@ def delete_tournament(request, tournament_id):
 def page_simple_tournament(request, tournament_name):
     tournament = get_object_or_404(Tournament, name__iexact=tournament_name)
     return render(request, 'page_simple_tournament.html', {'tournament': tournament})
+
+def update_tournament_description(request, tournament_id):
+    tournament = get_object_or_404(Tournament, id=tournament_id)
+    if request.method == "POST":
+        new_description = request.POST.get("description", "").strip()
+        tournament.description = new_description
+        tournament.save()
+        return redirect("page_simple_tournament", tournament.name)
+    return render(request, "tournament_detail.html", {"tournament": tournament})

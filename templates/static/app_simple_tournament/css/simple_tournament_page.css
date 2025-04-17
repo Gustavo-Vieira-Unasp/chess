@@ -1,0 +1,144 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Top Bar Styling */
+  .top-bar {
+    width: 100%;
+    background-color: var(--dark-color); /* Use your defined color */
+    color: var(--light-color); /* Use your defined color */
+    text-align: center;
+    padding: 20px 0; /* Vertical padding for spacing */
+    font-size: clamp(24px, 4vw, 36px); /* Responsive font size */
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  }
+  
+  /* Dashboard Styling */
+  .dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+    justify-content: flex-start; /* Align items to the top */
+    min-height: 100vh; /* Ensure full viewport height */
+    padding: 20px;
+    background-color: var(--main-color); /* Use your defined color */
+  }
+  
+  /* Tournament Container Styling */
+  .tournament-container {
+    width: 100%;
+    max-width: 800px; /* Limit the width for readability */
+    background-color: var(--light-color); /* Use your defined color */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center-align text inside the container */
+    margin-top: 20px; /* Space below the top bar */
+  }
+  
+  /* Description Sub-Container */
+  .description-container {
+    margin-bottom: 20px;
+    background-color: #f9f9f9; /* Light background for contrast */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: left; /* Align text to the left */
+    position: relative; /* For edit button positioning */
+    min-height: 100px; /* Minimum height for consistency */
+  }
+  
+  /* Description Text */
+  .description-text {
+    font-size: clamp(14px, 2vw, 18px);
+    line-height: 1.6; /* Improve readability */
+    color: var(--dark-color); /* Use your defined color */
+    cursor: pointer; /* Indicate it's clickable */
+  }
+  
+  /* Edit Button */
+  .edit-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--main-color);
+    transition: color 0.3s ease;
+  }
+  
+  .edit-button:hover {
+    color: var(--dark-color);
+  }
+  
+  /* Editable Input Field */
+  .editable-input {
+    display: none; /* Hidden by default */
+    width: 100%;
+    padding: 10px;
+    font-size: clamp(14px, 2vw, 18px);
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: none; /* Prevent resizing */
+    min-height: 100px; /* Match the container's height */
+  }
+  
+  /* Save Button */
+  .save-button {
+    display: none; /* Hidden by default */
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: var(--main-color); /* Use your defined color */
+    color: var(--light-color); /* Use your defined color */
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .save-button:hover {
+    background-color: var(--dark-color); /* Darken on hover */
+  }
+  
+  /* Tournament Link Styling */
+  .tournament-link {
+    display: inline-block;
+    background-color: var(--main-color); /* Use your defined color */
+    color: var(--light-color); /* Use your defined color */
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .tournament-link:hover {
+    background-color: var(--dark-color); /* Darken on hover */
+  }
+  
+  /* Return to Home Styling */
+  .return-home {
+    margin-top: auto; /* Push this section to the bottom */
+  }
+  
+  .return-home a {
+    color: var(--dark-color); /* Use your defined color */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  
+  .return-home a:hover {
+    color: var(--main-color); /* Highlight on hover */
+  }

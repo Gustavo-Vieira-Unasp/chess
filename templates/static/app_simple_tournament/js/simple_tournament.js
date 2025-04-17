@@ -3,18 +3,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const btn = document.getElementById("createTournamentBtn");
     const span = document.querySelector(".close");
 
-    if (!modal || !btn || !span) return console.error("Required elements not found!");
+    if (!modal || !btn || !span) {
+        console.error("Required elements not found!");
+        return;
+    }
 
     const showModal = () => {
         modal.classList.add("show");
         modal.setAttribute("aria-hidden", "false");
-        document.getElementById("tournament_name")?.focus();
+        const tournamentNameInput = document.getElementById("tournament_name");
+        if (tournamentNameInput) tournamentNameInput.focus();
     };
 
     const hideModal = () => {
         modal.classList.remove("show");
         modal.setAttribute("aria-hidden", "true");
-        btn.focus();
+        if (btn) btn.focus();
     };
 
     btn.addEventListener("click", showModal);
@@ -38,12 +42,47 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener('click', (event) => {
         if (event.target.matches('.delete-button')) {
             event.stopPropagation();
-            console.log('Delete button clicked');
+            handleDelete(event.target);
+        }
+    });
+
+    // Form validation
+    document.getElementById("tournamentForm")?.addEventListener("submit", (event) => {
+        let isValid = true;
+
+        const nameInput = document.getElementById("tournament_name");
+        const dateInput = document.getElementById("tournament_date");
+
+        if (!nameInput.value.trim()) {
+            isValid = false;
+            nameInput.nextElementSibling.style.display = "inline";
+        } else {
+            nameInput.nextElementSibling.style.display = "none";
+        }
+
+        if (!dateInput.value.trim()) {
+            isValid = false;
+            dateInput.nextElementSibling.style.display = "inline";
+        } else {
+            dateInput.nextElementSibling.style.display = "none";
+        }
+
+        if (!isValid) {
+            event.preventDefault(); // Prevent form submission if invalid
         }
     });
 });
 
 function toggleDeleteOption(container, show = true) {
     const deleteOption = container.querySelector('.delete-option');
-    if (deleteOption) deleteOption.classList.toggle('hidden', !show);
+    if (deleteOption) {
+        deleteOption.classList.toggle('hidden', !show);
+    }
+}
+
+function handleDelete(button) {
+    const container = button.closest('.container');
+    if (container) {
+        container.remove(); // Perform the delete action
+    }
 }

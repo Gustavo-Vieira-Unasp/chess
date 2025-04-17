@@ -3,7 +3,7 @@
 
 <!-- Title Block -->
 {% block 'title' %}
-{{ block.super }} - {% trans "Torneio Simples" %}
+{{ block.super }} Gerenciar - {% trans "Torneio Simples" %}
 {% endblock %}
 
 <!-- Head Block: CSS and Meta Tags -->
@@ -15,11 +15,16 @@
 
 <!-- Dashboard Block: Main Content -->
 {% block 'dashboard' %}
+<noscript>
+    <p>Por favor, habilite o JavaScript para usar esta página.</p>
+</noscript>
+
 <div class="dashboard">
     <!-- First Container: Create Tournament -->
     <div class="container" id="createTournamentBtn" role="button" tabindex="0">
         <div class="bracket-section">
             {% include 'app_simple_tournament/svg/tournament_bracket.html' %}
+            <div class="svg-fallback" style="display: none;">SVG não disponível</div>
         </div>
         <div class="text-section">
             <div class="create-btn">{% trans "Criar Torneio Simples" %}</div>
@@ -29,18 +34,17 @@
     <!-- Dynamically Generated Tournament Containers -->
     {% for tournament in tournaments %}
     <a href="{% url 'page_simple_tournament' tournament.name %}" class="tournament-link-container">
-        <div class="container" data-tournament-id="{{ tournament.id }}" onmouseover="toggleDeleteOption(this, true)" onmouseout="toggleDeleteOption(this, false)">
+        <div class="container" data-tournament-id="{{ tournament.id }}">
             <!-- Delete Option (Trash Can Icon) -->
             <div class="delete-option hidden">
                 <form action="{% url 'delete_tournament' tournament.id %}" method="POST" style="display: inline;">
                     {% csrf_token %}
-                    <button type="submit" class="delete-button" aria-label="{% trans 'Excluir torneio' %}">
+                    <button type="submit" class="delete-button" role="button" tabindex="0" aria-label="{% trans 'Excluir torneio' %}">
                         <i class='bx bx-trash'></i>
                     </button>
                 </form>
             </div>
-
-            <!-- Text Section with Tournament Name and Date -->
+            <!-- Text Section -->
             <div class="text-section">
                 <div class="tournament-name">{{ tournament.name }}</div>
                 <div class="tournament-date">{{ tournament.date }}</div>
@@ -53,24 +57,26 @@
 <!-- The Modal -->
 <div id="tournamentModal" class="modal">
     <div class="modal-content">
-      <span class="close" onclick="document.getElementById('tournamentModal').style.display='none'">&times;</span>
-      <h2>Criar Torneio</h2>
-      <form id="tournamentForm" method="POST" action="{% url 'create_tournament' %}">
-        {% csrf_token %}
-        <div class="form-row">
-          <div class="form-group">
-            <label for="tournament_name">Nome do Torneio:</label>
-            <input type="text" id="tournament_name" name="tournament_name" required>
-          </div>
-          <div class="form-group">
-            <label for="tournament_date">Data do Torneio:</label>
-            <input type="date" id="tournament_date" name="tournament_date" required>
-          </div>
-        </div>
-        <button type="submit">Criar</button>
-      </form>
+        <span class="close">&times;</span>
+        <h2>Criar Torneio</h2>
+        <form id="tournamentForm" method="POST" action="{% url 'create_tournament' %}">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="tournament_name">Nome do Torneio:</label>
+                    <input type="text" id="tournament_name" name="tournament_name" required>
+                    <small class="error-message">Campo obrigatório</small>
+                </div>
+                <div class="form-group">
+                    <label for="tournament_date">Data do Torneio:</label>
+                    <input type="date" id="tournament_date" name="tournament_date" required>
+                    <small class="error-message">Campo obrigatório</small>
+                </div>
+            </div>
+            <button type="submit">Criar</button>
+        </form>
     </div>
-  </div>
+</div>
 {% endblock %}
 
 <!-- Body Block: JavaScript -->

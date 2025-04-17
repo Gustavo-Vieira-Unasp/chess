@@ -6,4 +6,5 @@ urlpatterns = [
     path('create_tournament/', views.create_tournament, name="create_tournament"),
     path('delete/<int:tournament_id>', views.delete_tournament, name='delete_tournament'),
     path('tournament/<str:tournament_name>', views.page_simple_tournament, name='page_simple_tournament'),
+    path('tournament/<int:tournament_id>/update_description/', views.update_tournament_description, name='update_tournament_description'),
 ]
