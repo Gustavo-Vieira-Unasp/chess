@@ -2,7 +2,12 @@ from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseNotAllowed
 from django.urls import reverse
-from .models import Tournament
+from django.contrib import messages
+from .models import Tournament, Player
+from .forms import PlayerForm
+from django.views.decorators.http import require_POST, require_http_methods
+from django.http import JsonResponse
+from django.forms.models import model_to_dict
 
 def simple_tournament(request):
     tournaments = Tournament.objects.all().order_by('-id')
@@ -52,7 +57,11 @@ def delete_tournament(request, tournament_id):
 
 def page_simple_tournament(request, tournament_name):
     tournament = get_object_or_404(Tournament, name__iexact=tournament_name)
-    return render(request, 'page_simple_tournament.html', {'tournament': tournament})
+    players = tournament.players.all()
+    return render(request, 'page_simple_tournament.html', {
+        'tournament': tournament,
+        'players': players
+    })
 
 def update_tournament_description(request, tournament_id):
     tournament = get_object_or_404(Tournament, id=tournament_id)
@@ -60,5 +69,47 @@ def update_tournament_description(request, tournament_id):
         new_description = request.POST.get("description", "").strip()
         tournament.description = new_description
         tournament.save()
-        return redirect("page_simple_tournament", tournament.name)
-    return render(request, "tournament_detail.html", {"tournament": tournament})
+        messages.success(request, "Descrição do torneio atualizada com sucesso!")
+        return redirect("page_simple_tournament", tournament_name = tournament.name)
+    return redirect(request, "page_simple_tournament", tournament_name = tournament.name)
+
+@require_POST
+def add_player(request, tournament_id):
+    tournament = get_object_or_404(Tournament, pk=tournament_id)
+    
+    player_form = PlayerForm(request.POST)
+
+    if player_form.is_valid():
+        player = player_form.save(commit=False)
+        player.tournament = tournament
+        player.save()
+        
+        return JsonResponse({
+            'success': True,
+            'message': f"Jogador '{player.name}' adicionado com sucesso!",
+            'player': {
+                'id': player.id,
+                'name': player.name,
+                'rating': player.rating
+            }
+        }, status=200) # Status 200 OK
+    else:
+        errors = player_form.errors.as_json()
+        return JsonResponse({
+            'success': False,
+            'message': "Erro ao adicionar jogador.",
+            'errors': player_form.errors.as_json()
+        }, status=400)
+    
+@require_POST
+def delete_player(request, tournament_id, player_id):
+    tournament = get_object_or_404(Tournament, pk=tournament_id)
+    player = get_object_or_404(Player, pk=player_id, tournament=tournament)
+
+    if player.tournament != tournament:
+        messages.error(request, "Jogador não pertence a este torneio")
+        return redirect('page_simple_tournament', tournament_name=tournament.name)
+
+    player.delete()
+    messages.success(request, f"Jogador '{player.name}' excluido com sucesso")
+    return redirect('page_simple_tournament', tournament_name=tournament.name)

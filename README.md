@@ -24,3 +24,4 @@ V.:
   -0.0.0.0.0.0.0.0.020 (logo ajustments)
   -0.0.0.0.0.0.0.0.021 (roundier input *asking help)
   -0.0.0.0.0.0.0.0.022 (simple_tournament_page desc)
+  -0.0.0.0.0.0.0.0.023 (add/remove players from simple_tournament_page)

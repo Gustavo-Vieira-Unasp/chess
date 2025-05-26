@@ -1,52 +1,110 @@
 {% extends 'base.html' %}
 {% load static %}
 
-<!-- Title Block -->
 {% block 'title' %}
-{{ tournament.name }} - Torneio simples
+    {{ tournament.name }} - Gerenciador de Torneios
 {% endblock %}
 
-<!-- Head Block: CSS and Meta Tags -->
 {% block 'head' %}
-<link rel="stylesheet" href="{% static 'app_simple_tournament/css/simple_tournament_page.css' %}">
-<meta name="description" content="{{ tournament.description|default:'Details about the tournament.' }}">
-<meta property="og:title" content="{{ tournament.name }}">
-<meta property="og:description" content="{{ tournament.description|default:'Details about the tournament.' }}">
-<meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <link rel="stylesheet" href="{% static 'app_simple_tournament/css/simple_tournament_page.css' %}">
+    <meta name="description" content="{{ tournament.description|default:'Detalhes sobre o torneio atual e seus jogadores.' }}">
+    <meta property="og:title" content="{{ tournament.name }} - Gerenciador de Torneios">
+    <meta property="og:description" content="{{ tournament.description|default:'Acompanhe e gerencie este torneio, adicione jogadores e veja seus detalhes.' }}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="{% static 'app_simple_tournament/images/favicon.ico' %}" type="image/x-icon">
+    {# Certifique-se de que o link para os Boxicons está aqui ou em base.html #}
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 {% endblock %}
 
-<!-- Dashboard Block: Main Content -->
 {% block 'dashboard' %}
-<div class="dashboard">
-    <!-- Top Bar with Tournament Name -->
-    <div class="top-bar">
-        {{ tournament.name }}
-    </div>
-
-    <!-- Tournament Details Section -->
-    <div class="tournament-container">
-        <!-- Description Container -->
-        <div class="description-container">
-            <p class="description-text" id="descriptionText">{{ tournament.description|default:"Edite a descrição do torneio" }}</p>
-            <button class="edit-button" id="editButton">&#9998;</button> <!-- Pencil icon -->
-            <textarea class="editable-input" id="editableInput">{{ tournament.description|default:"Edite a descrição do torneio" }}</textarea>
-            <form id="saveForm" method="POST" action="{% url 'update_tournament_description' tournament.id %}">
-                {% csrf_token %}
-                <input type="hidden" id="hiddenDescription" name="description" value="{{ tournament.description|default:'Edit description here...' }}">
-                <button type="submit" class="save-button" id="saveButton">Save</button> <!-- Save button -->
-            </form>
+    <div class="dashboard">
+        <div class="top-bar">
+            {{ tournament.name }}
         </div>
 
-        <!-- Tournament Link -->
-        {% if tournament.link %}
-            <a href="{{ tournament.link }}" class="tournament-link">Mais detalhes...</a>
-        {% else %}
-            <p>Sem mais detalhes disponíveis</p>
-        {% endif %}
-        
-    </div>
-</div>
+        <div class="tournament-container" data-tournament-id="{{ tournament.id }}"> {# Adicionado data-tournament-id aqui #}
 
-<!-- JavaScript Import -->
-<script src="{% static 'app_simple_tournament/js/simple_tournament_page.js' %}"></script>
+            <div class="description-container">
+                <p class="description-text" id="descriptionText" title="Clique para editar a descrição">
+                    {{ tournament.description|default:"Edite a descrição do torneio aqui..." }}
+                </p>
+                <button class="edit-button" id="editButton" title="Editar descrição">&#9998;</button>
+                <textarea class="editable-input" id="editableInput" placeholder="Digite a nova descrição aqui..."></textarea>
+                <form id="saveForm" method="POST" action="{% url 'update_tournament_description' tournament.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" id="hiddenDescription" name="description" value="{{ tournament.description|default:'' }}">
+                    <button type="submit" class="save-button" id="saveButton" title="Salvar alterações">Salvar</button>
+                </form>
+            </div>
+
+            {% if tournament.link %}
+                <a href="{{ tournament.link }}" class="tournament-link" target="_blank" rel="noopener noreferrer">Mais detalhes do torneio...</a>
+            {% else %}
+                <p class="no-details-message">Sem link de detalhes adicionais disponível.</p>
+            {% endif %}
+
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <hr class="section-divider"> {# Divisor de Seção #}
+
+            <div class="players-section">
+                <h2>Jogadores</h2>
+                <div class="players-list-container">
+                    {% if players %}
+                        {% for player in players %}
+                            <div class="player-card" data-player-id="{{ player.id }}">
+                                <span class="player-name">{{ player.name }}</span>
+                                
+                                {# ESTRUTURA PADRÃO PARA O BOTÃO DE EXCLUSÃO DE JOGADOR - Garanta que esta estrutura seja IDÊNTICA à gerada pelo JS #}
+                                <div class="delete-player-option" title="Excluir jogador">
+                                    <form action="{% url 'delete_player' tournament.id player.id %}" method="POST" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="delete-player-button" role="button" tabindex="0" aria-label="Excluir jogador">
+                                            <i class='bx bx-trash'></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                {# FIM DA ESTRUTURA PADRÃO #}
+
+                                <div class="player-number-box">
+                                    <span class="player-number">{{ player.rating|default:"0" }}</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="no-players-message">Nenhum jogador adicionado ainda.</p>
+                    {% endif %}
+                </div>
+                <button id="openAddPlayerModalButton" class="add-player-button">Adicionar Novo Jogador</button>
+            </div>
+
+            <hr class="section-divider"> {# Divisor de Seção #}
+
+            <div id="addPlayerModal" class="modal" style="display: none;"> {# CORREÇÃO AQUI: removido o display: flex; extra #}
+                <div class="modal-content">
+                    <span class="close-button">&times;</span>
+                    <h2>Adicionar Jogador</h2>
+                    <form id="addPlayerForm" method="post" action="{% url 'add_player' tournament.id %}">
+                        {% csrf_token %}
+                        <div class="form-field">
+                            <label for="id_name">Nome:</label>
+                            <input type="text" id="id_name" name="name" required placeholder="Digite o nome do jogador">
+                        </div>
+                        <p id="playerFormError" class="error-message" style="display:none;"></p>
+                        <button type="submit" class="submit-player-button">Salvar Jogador</button>
+                    </form>
+                </div>
+            </div>
+            
+        </div> {# Fim do tournament-container #}
+    </div> {# Fim do dashboard #}
+
+    <script src="{% static 'app_simple_tournament/js/simple_tournament_page.js' %}"></script>
 {% endblock %}

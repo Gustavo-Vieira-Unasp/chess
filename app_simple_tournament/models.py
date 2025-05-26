@@ -12,10 +12,15 @@ class Tournament(models.Model):
 
 class Player(models.Model):
     name = models.CharField(max_length=150)
+    rating = models.IntegerField(default=0, blank=True, null=True) 
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='players')
 
     def __str__(self):
         return f"{self.name} (Tournament: {self.tournament.name})"
+
+    class Meta:
+        unique_together = ('tournament', 'name')
+        ordering = ['-rating', 'name']
 
 
 class Match(models.Model):
