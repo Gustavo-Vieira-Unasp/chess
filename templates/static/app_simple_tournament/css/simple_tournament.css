@@ -156,7 +156,7 @@
 }
 
 .close {
-  color: #aaa;
+  color: var(--light-color);
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -165,7 +165,7 @@
 
 .close:hover,
 .close:focus {
-  color: black;
+  color: var(--dark-color);
   text-decoration: none;
 }
 
@@ -233,18 +233,6 @@
 
 .delete-button:hover {
   color: darkred;
-}
-
-.delete-button::after {
-  content: "Delete";
-  font-size: 12px;
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.3s ease;
 }
 
 .delete-button:hover::after {

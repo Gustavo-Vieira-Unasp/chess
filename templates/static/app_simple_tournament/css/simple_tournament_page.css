@@ -243,7 +243,7 @@
     min-width: 75px;
     height: 60px;
     background-color: var(--light-color);
-    color: var(--dark-color); /* RESTAURADO: dark-color */
+    color: #ddd; /* RESTAURADO: dark-color */
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
     display: flex;
@@ -299,25 +299,6 @@
     color: darkred;
 }
 
-/* Texto "Delete" que aparece no hover do botão */
-.delete-player-button::after {
-    content: "Delete";
-    font-size: 12px;
-    position: absolute;
-    top: 100%; /* Abaixo do ícone */
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    opacity: 0; /* Escondido por padrão */
-    transition: opacity 0.3s ease;
-    color: var(--dark-color);
-    background-color: var(--light-color);
-    padding: 2px 5px;
-    border-radius: 3px;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 1px 3px var(--shadow-color);
-}
-
 .delete-player-button:hover::after {
     opacity: 1;
 }
@@ -368,7 +349,7 @@
 }
 
 .modal-content {
-    background-color: var(--light-color); /* RESTAURADO: light-color */
+    background-color: var(--contrast-color); /* RESTAURADO: light-color */
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
@@ -388,7 +369,7 @@
 }
 
 .close-button {
-    color: #aaa;
+    color: var(--light-color);
     float: right;
     font-size: 28px;
     font-weight: bold;
@@ -407,7 +388,7 @@
 /* Estilos para o formulário dentro do modal */
 .modal-content h2 {
     margin-top: 0;
-    color: var(--dark-color);
+    color: #ddd;
 }
 
 .modal-content .form-field {
@@ -418,7 +399,7 @@
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
-    color: var(--dark-color);
+    color: #ddd;
 }
 
 .modal-content input[type="text"] {

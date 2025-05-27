@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log("DEBUG: Formulário de descrição submetido.");
         });
 
-        // *** CORREÇÃO AQUI: Adicionado listener ESC para o input de descrição ***
+        // Adicionado listener ESC para o input de descrição
         editableInput.addEventListener('keydown', function(event) {
             if (event.key === 'Escape' || event.key === 'Esc') {
                 console.log("DEBUG: Tecla ESC pressionada no input de descrição. Fechando edição.");
@@ -48,6 +48,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 saveButton.style.display = 'none';
                 descriptionText.style.display = 'block';
                 editButton.style.display = 'block';
+                event.preventDefault(); // Impede qualquer comportamento padrão do ESC no textarea
+            } 
+            // *** NOVO: Salvar ao pressionar Ctrl + Enter / Cmd + Enter ***
+            else if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') { // event.metaKey para Cmd no Mac
+                console.log("DEBUG: Ctrl/Cmd + Enter pressionado no input de descrição. Salvando...");
+                hiddenDescription.value = editableInput.value.trim();
+                saveForm.submit();
+                event.preventDefault(); // Impede que uma nova linha seja inserida no textarea
             }
         });
 
@@ -56,8 +64,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 !editableInput.contains(event.target) && !saveButton.contains(event.target) &&
                 editableInput.style.display === 'block') {
                 
-                // Se o input não estiver vazio e não foi salvo, restaura a exibição original
-                // ou você pode adicionar lógica para um "cancelar"
                 editableInput.style.display = 'none';
                 saveButton.style.display = 'none';
                 descriptionText.style.display = 'block';
@@ -161,13 +167,16 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => {
                 console.log('DEBUG: Resposta da requisição AJAX de adicionar jogador recebida. Status:', response.status);
                 if (!response.ok) {
-                    return response.json().then(err => { throw err; });
+                    return response.text().then(text => { 
+                        console.error("ERRO AJAX DETECTADO. Resposta do servidor (não JSON):", text);
+                        throw new Error(`Erro do servidor (${response.status}): ${text.substring(0, 100)}... (ver console para resposta completa)`); 
+                    });
                 }
                 return response.json();
             })
             .then(data => {
-                if (data.status === 'success') { // Django está retornando 'success': True
-                    console.log('DEBUG: Jogador adicionado com sucesso:', data.player.name); // Data.player.name para acessar o nome
+                if (data.success) {
+                    console.log('DEBUG: Jogador adicionado com sucesso:', data.player.name);
 
                     const playersListContainer = document.querySelector('.players-list-container');
                     const noPlayersMessage = document.querySelector('.no-players-message');
@@ -177,11 +186,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.log("DEBUG: Mensagem 'Nenhum jogador' removida.");
                     }
 
-                    // GARANTA QUE ESTA ESTRUTURA SEJA IDÊNTICA À DO HTML RENDERIZADO PELO DJANGO
-                    // PARA QUE O CSS DA LIXEIRA FUNCIONE CORRETAMENTE
                     const newPlayerCard = document.createElement('div');
                     newPlayerCard.classList.add('player-card');
-                    newPlayerCard.dataset.playerId = data.player.id; // data.player.id
+                    newPlayerCard.dataset.playerId = data.player.id;
                     newPlayerCard.innerHTML = `
                         <span class="player-name">${data.player.name}</span>
                         <div class="delete-player-option" title="Excluir jogador">
@@ -207,16 +214,26 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.log("DEBUG: Modal de adicionar jogador fechado e formulário limpo.");
                     }, 300);
 
-                    // Se a mensagem de sucesso vem no 'data.message' da resposta JsonResponse
-                    messages.success(request, data.message); // Django messages API não funciona aqui diretamente
-                    // Talvez você queira um alert() ou uma notificação simples em JS
-                    // alert(data.message); 
                     console.log(`SUCESSO: ${data.message}`);
 
                 } else {
-                    playerFormError.innerText = data.message || 'Ocorreu um erro ao adicionar o jogador.';
+                    let errorMessage = data.message || 'Ocorreu um erro ao adicionar o jogador.';
+                    if (data.errors) {
+                         try {
+                            const parsedErrors = JSON.parse(data.errors);
+                            if (parsedErrors.__all__ && parsedErrors.__all__.length > 0) {
+                                errorMessage += ' ' + parsedErrors.__all__[0].message;
+                            } else if (parsedErrors.name && parsedErrors.name.length > 0) {
+                                errorMessage += ' ' + parsedErrors.name[0].message;
+                            }
+                        } catch (e) {
+                            console.warn("Não foi possível parsear os erros JSON do formulário:", data.errors, e);
+                            errorMessage += ' Detalhes do erro: ' + data.errors;
+                        }
+                    }
+                    playerFormError.innerText = errorMessage;
                     playerFormError.style.display = 'block';
-                    console.log('DEBUG: Erro ao adicionar jogador:', data.message);
+                    console.log('DEBUG: Erro ao adicionar jogador:', data.message, data.errors);
                 }
             })
             .catch(error => {
