@@ -26,3 +26,4 @@ V.:
   -0.0.0.0.0.0.0.0.022 (simple_tournament_page desc)
   -0.0.0.0.0.0.0.0.023 (add/remove players from simple_tournament_page)
   -0.0.0.0.0.0.0.0.023.1 (add/remove players bug fix)
+  -0.0.0.0.0.0.0.0.023.2 (errors and errors)

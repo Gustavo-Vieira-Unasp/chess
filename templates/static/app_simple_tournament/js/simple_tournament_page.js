@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const editableInput = document.getElementById('editableInput');
     const saveButton = document.getElementById('saveButton');
     const hiddenDescription = document.getElementById('hiddenDescription');
-    const saveForm = document.getElementById('saveForm'); // Formulário de salvamento
+    const saveForm = document.getElementById('saveForm');
 
     if (descriptionText && editButton && editableInput && saveButton && hiddenDescription && saveForm) {
         console.log("DEBUG: Elementos de edição da descrição encontrados.");
@@ -34,32 +34,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
         saveButton.addEventListener('click', function() {
             hiddenDescription.value = editableInput.value.trim();
-            saveForm.submit(); // Envia o formulário
+            saveForm.submit();
             console.log("DEBUG: Formulário de descrição submetido.");
         });
 
-        // Adicionado listener ESC para o input de descrição
         editableInput.addEventListener('keydown', function(event) {
             if (event.key === 'Escape' || event.key === 'Esc') {
                 console.log("DEBUG: Tecla ESC pressionada no input de descrição. Fechando edição.");
-                // Reverte para o texto original antes de esconder
-                editableInput.value = descriptionText.innerText.trim(); 
+                editableInput.value = descriptionText.innerText.trim();
                 editableInput.style.display = 'none';
                 saveButton.style.display = 'none';
                 descriptionText.style.display = 'block';
                 editButton.style.display = 'block';
-                event.preventDefault(); // Impede qualquer comportamento padrão do ESC no textarea
+                event.preventDefault();
             } 
-            // *** NOVO: Salvar ao pressionar Ctrl + Enter / Cmd + Enter ***
-            else if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') { // event.metaKey para Cmd no Mac
+            else if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
                 console.log("DEBUG: Ctrl/Cmd + Enter pressionado no input de descrição. Salvando...");
                 hiddenDescription.value = editableInput.value.trim();
                 saveForm.submit();
-                event.preventDefault(); // Impede que uma nova linha seja inserida no textarea
+                event.preventDefault();
             }
         });
 
         document.addEventListener('click', function(event) {
+            // Verifica se o clique foi fora dos elementos de edição da descrição
             if (!descriptionText.contains(event.target) && !editButton.contains(event.target) &&
                 !editableInput.contains(event.target) && !saveButton.contains(event.target) &&
                 editableInput.style.display === 'block') {
@@ -85,6 +83,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const tournamentContainer = document.querySelector('.tournament-container');
     let tournamentId = null;
 
+    // NOVO: Referências aos elementos de estatísticas (spans)
+    const numPlayersSpan = document.getElementById('numPlayers');
+    const recommendedRoundsSpan = document.getElementById('recommendedRounds');
+
     if (tournamentContainer) {
         tournamentId = tournamentContainer.dataset.tournamentId;
         console.log('DEBUG: Tournament ID obtido:', tournamentId);
@@ -92,14 +94,15 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('ERRO: Elemento .tournament-container não encontrado no DOM!');
     }
 
-    if (openAddPlayerModalButton && addPlayerModal && closeButton && addPlayerForm && playerNameInput && playerFormError && tournamentId) {
-        console.log('DEBUG: Todos os elementos do modal e tournamentId foram encontrados. Modal deve funcionar corretamente.');
+    // Adicione a verificação dos novos spans aqui na condição principal
+    if (openAddPlayerModalButton && addPlayerModal && closeButton && addPlayerForm && playerNameInput && playerFormError && tournamentId && numPlayersSpan && recommendedRoundsSpan) {
+        console.log('DEBUG: Todos os elementos do modal e tournamentId, e spans de estatísticas foram encontrados. Modal e estatísticas devem funcionar corretamente.');
 
         openAddPlayerModalButton.addEventListener('click', function() {
             console.log('DEBUG: Botão "Adicionar Novo Jogador" clicado. Abrindo modal.');
             addPlayerModal.style.display = 'flex';
             addPlayerModal.classList.add('show');
-            playerNameInput.focus();
+            playerNameInput.focus(); // Foca no campo de nome ao abrir o modal
         });
 
         closeButton.addEventListener('click', function() {
@@ -107,11 +110,12 @@ document.addEventListener('DOMContentLoaded', function() {
             addPlayerModal.classList.remove('show');
             setTimeout(() => {
                 addPlayerModal.style.display = 'none';
-                playerFormError.style.display = 'none';
-                playerNameInput.value = '';
-            }, 300);
+                playerFormError.style.display = 'none'; // Limpa a mensagem de erro ao fechar
+                playerNameInput.value = ''; // Limpa o campo de entrada ao fechar
+            }, 300); // Deve ser igual à duração da transição CSS
         });
 
+        // Fechar modal ao clicar fora
         window.addEventListener('click', function(event) {
             if (event.target == addPlayerModal) {
                 console.log("DEBUG: Clique FORA do modal. Fechando modal.");
@@ -124,14 +128,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
+        // Fechar modal com a tecla ESC
         document.addEventListener('keydown', function(event) {
-            // Verifica se o foco NÃO está no editableInput da descrição
-            // para que o ESC feche o modal e não o campo de descrição.
+            // Verifica se a tecla ESC foi pressionada e se o input de descrição NÃO está ativo
             if ((event.key === 'Escape' || event.key === 'Esc') && editableInput !== document.activeElement) { 
                 if (addPlayerModal.classList.contains('show')) {
                     console.log("DEBUG: Tecla ESC pressionada. Fechando modal.");
                     addPlayerModal.classList.remove('show');
-                    setTimeout(() => { addPlayerModal.style.display = 'none'; }, 300);
+                    setTimeout(() => { 
+                        addPlayerModal.style.display = 'none';
+                        playerFormError.style.display = 'none';
+                        playerNameInput.value = '';
+                    }, 300);
                 }
             }
         });
@@ -150,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            // Define a URL de ação do formulário dinamicamente
+            // Define a action do formulário dinamicamente, garantindo que o tournamentId está correto
             addPlayerForm.action = `/simple_tournament/tournament/${tournamentId}/add_player/`;
             console.log('DEBUG: URL de ação do formulário AJAX:', addPlayerForm.action);
 
@@ -158,37 +166,51 @@ document.addEventListener('DOMContentLoaded', function() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': getCookie('csrftoken')
+                    'X-CSRFToken': getCookie('csrftoken') // Função auxiliar para obter o CSRF token
                 },
-                body: new URLSearchParams({
+                body: new URLSearchParams({ // Converte os dados do formulário para URL-encoded
                     'name': playerName
                 })
             })
             .then(response => {
                 console.log('DEBUG: Resposta da requisição AJAX de adicionar jogador recebida. Status:', response.status);
                 if (!response.ok) {
+                    // Se a resposta não for OK (ex: 400, 500), tenta ler como texto para debug
                     return response.text().then(text => { 
-                        console.error("ERRO AJAX DETECTADO. Resposta do servidor (não JSON):", text);
+                        console.error("ERRO AJAX DETECTADO. Resposta do servidor (não JSON ou erro):", text);
                         throw new Error(`Erro do servidor (${response.status}): ${text.substring(0, 100)}... (ver console para resposta completa)`); 
                     });
                 }
-                return response.json();
+                return response.json(); // Se OK, tenta parsear como JSON
             })
             .then(data => {
                 if (data.success) {
                     console.log('DEBUG: Jogador adicionado com sucesso:', data.player.name);
 
+                    // --- NOVO: Atualiza a contagem de jogadores e rodadas recomendadas ---
+                    // Verifica se os spans existem antes de tentar atualizar
+                    if (numPlayersSpan && recommendedRoundsSpan) {
+                        numPlayersSpan.innerText = data.num_players;
+                        recommendedRoundsSpan.innerText = data.recommended_rounds; // <-- AQUI É ATUALIZADO
+                        console.log(`DEBUG: Contagem de jogadores atualizada para ${data.num_players}, rodadas para ${data.recommended_rounds}.`);
+                    } else {
+                        console.warn("AVISO: Spans de contagem de jogadores/rodadas não encontrados para atualização. Verifique o HTML.");
+                    }
+                    // --- FIM NOVO ---
+
                     const playersListContainer = document.querySelector('.players-list-container');
                     const noPlayersMessage = document.querySelector('.no-players-message');
 
+                    // Remove a mensagem "Nenhum jogador adicionado ainda" se ela existir
                     if (noPlayersMessage) {
                         noPlayersMessage.remove();
                         console.log("DEBUG: Mensagem 'Nenhum jogador' removida.");
                     }
 
+                    // Cria e adiciona o novo card do jogador dinamicamente
                     const newPlayerCard = document.createElement('div');
                     newPlayerCard.classList.add('player-card');
-                    newPlayerCard.dataset.playerId = data.player.id;
+                    newPlayerCard.dataset.playerId = data.player.id; // Armazena o ID do jogador
                     newPlayerCard.innerHTML = `
                         <span class="player-name">${data.player.name}</span>
                         <div class="delete-player-option" title="Excluir jogador">
@@ -206,21 +228,24 @@ document.addEventListener('DOMContentLoaded', function() {
                     playersListContainer.appendChild(newPlayerCard);
                     console.log(`DEBUG: Card do jogador ${data.player.name} adicionado ao DOM.`);
 
+                    // Fecha o modal e limpa o formulário
                     addPlayerModal.classList.remove('show');
                     setTimeout(() => {
                         addPlayerModal.style.display = 'none';
                         playerFormError.style.display = 'none';
                         playerNameInput.value = '';
                         console.log("DEBUG: Modal de adicionar jogador fechado e formulário limpo.");
-                    }, 300);
+                    }, 300); // Deve ser igual à duração da transição CSS
 
                     console.log(`SUCESSO: ${data.message}`);
 
                 } else {
+                    // Lidar com erros de validação ou outros erros do servidor
                     let errorMessage = data.message || 'Ocorreu um erro ao adicionar o jogador.';
                     if (data.errors) {
                          try {
                             const parsedErrors = JSON.parse(data.errors);
+                            // Tenta extrair a mensagem de erro específica do formulário
                             if (parsedErrors.__all__ && parsedErrors.__all__.length > 0) {
                                 errorMessage += ' ' + parsedErrors.__all__[0].message;
                             } else if (parsedErrors.name && parsedErrors.name.length > 0) {
@@ -237,13 +262,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             })
             .catch(error => {
+                // Lidar com erros de rede ou falha na requisição
                 console.error('ERRO: Falha na requisição AJAX de adicionar jogador:', error);
                 playerFormError.innerText = error.message || 'Erro na rede ou servidor.';
                 playerFormError.style.display = 'block';
             });
         });
     } else {
-        console.error('ERRO: Um ou mais elementos do modal de jogador não foram encontrados no DOM ou tournamentId está ausente. As funções de modal/adição de jogador não funcionarão.');
+        // Log de erro mais detalhado se algum elemento crítico não for encontrado
+        console.error('ERRO: Um ou mais elementos do modal de jogador ou dos spans de estatísticas não foram encontrados no DOM ou tournamentId está ausente. As funções de modal/adição de jogador e atualização de estatísticas não funcionarão.');
         console.log({
             openAddPlayerModalButton_exists: !!openAddPlayerModalButton,
             addPlayerModal_exists: !!addPlayerModal,
@@ -252,23 +279,28 @@ document.addEventListener('DOMContentLoaded', function() {
             playerNameInput_exists: !!playerNameInput,
             playerFormError_exists: !!playerFormError,
             tournamentId_exists: !!tournamentId,
-            tournamentId_value: tournamentId
+            tournamentId_value: tournamentId,
+            numPlayersSpan_exists: !!numPlayersSpan,         // Verifica se existe
+            recommendedRoundsSpan_exists: !!recommendedRoundsSpan // Verifica se existe
         });
     }
 
     // --- Lógica para Excluir Jogador (delegação de eventos) ---
+    // Usamos delegação de eventos porque os cards de jogador são adicionados/removidos dinamicamente.
     const playersSection = document.querySelector('.players-section'); 
 
     if (playersSection) {
         console.log("DEBUG: Elemento .players-section encontrado para delegação de exclusão.");
         playersSection.addEventListener('click', function(event) {
             const target = event.target;
+            // Usa closest para encontrar o botão de exclusão ou um de seus pais
             const deleteButton = target.closest('.delete-player-button');
             
             if (deleteButton) {
-                event.preventDefault(); // Impede o envio padrão do formulário via HTML
+                event.preventDefault(); // Impede o envio padrão do formulário imediatamente
                 console.log('DEBUG: Botão de exclusão de jogador clicado.');
 
+                // Encontra o player-card pai para obter o ID do jogador
                 const playerCard = deleteButton.closest('.player-card');
                 if (!playerCard) {
                     console.error('ERRO: player-card não encontrado para o botão de exclusão. A estrutura HTML do card pode estar incorreta.');
@@ -276,16 +308,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 const playerId = playerCard.dataset.playerId;
-                const currentTournamentId = tournamentId; 
+                const currentTournamentId = tournamentId; // Obtém o ID do torneio do escopo superior
 
                 if (!currentTournamentId) {
                     console.error('ERRO: Tournament ID não disponível para exclusão de jogador.');
                     return;
                 }
 
+                // Confirmação antes de excluir
                 if (confirm(`Tem certeza que deseja excluir o jogador?`)) {
                     const form = deleteButton.closest('form');
                     if (form) {
+                        // Define a action do formulário dinamicamente antes de submeter
                         form.action = `/simple_tournament/tournament/${currentTournamentId}/delete_player/${playerId}/`;
                         console.log('DEBUG: Enviando formulário de exclusão para:', form.action);
                         form.submit(); // Isso fará uma requisição POST e deve redirecionar
@@ -301,12 +335,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // --- Função auxiliar para obter o CSRF token ---
+    // Necessária para requisições POST seguras em Django
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
             const cookies = document.cookie.split(';');
             for (let i = 0; i < cookies.length; i++) {
                 const cookie = cookies[i].trim();
+                // Verifica se este cookie começa com o nome que estamos procurando
                 if (cookie.substring(0, name.length + 1) === (name + '=')) {
                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                     break;
@@ -316,15 +352,42 @@ document.addEventListener('DOMContentLoaded', function() {
         return cookieValue;
     }
 
-    // --- Lógica para esconder mensagens flash após um tempo ---
+    // --- Lógica para esconder mensagens flash e fechamento manual ---
     const messagesContainer = document.querySelector('.messages');
     if (messagesContainer) {
-        setTimeout(() => {
-            messagesContainer.style.opacity = '0';
-            messagesContainer.style.transition = 'opacity 1s ease-out';
+        const messageItems = messagesContainer.querySelectorAll('li'); // Seleciona CADA item <li> da mensagem
+
+        messageItems.forEach(messageItem => {
+            const closeButton = messageItem.querySelector('.close-message-button'); // Procura o botão DENTRO do <li> atual
+
+            if (closeButton) { // Se o botão for encontrado para este <li>
+                closeButton.addEventListener('click', function() {
+                    console.log("DEBUG: Botão de fechar mensagem clicado.");
+                    messageItem.classList.add('hide'); // Adiciona classe para iniciar a transição de saída
+                    setTimeout(() => {
+                        messageItem.remove(); // Remove o <li> completamente após a transição
+                        // Opcional: verifica se o container de mensagens está vazio e o esconde
+                        if (messagesContainer.children.length === 0) {
+                            messagesContainer.style.display = 'none';
+                        }
+                    }, 500); // Deve ser igual ou maior que a duração da transição CSS (.messages li.hide)
+                });
+            }
+
+            // Lógica para auto-sumir a mensagem após um tempo (5 segundos)
             setTimeout(() => {
-                messagesContainer.style.display = 'none';
-            }, 1000);
-        }, 5000);
+                // Verifica se a mensagem ainda não foi escondida (pelo clique, por exemplo)
+                if (!messageItem.classList.contains('hide')) {
+                    console.log("DEBUG: Mensagem sumindo automaticamente.");
+                    messageItem.classList.add('hide'); // Adiciona classe para iniciar a transição
+                    setTimeout(() => {
+                        messageItem.remove(); // Remove após a transição
+                        if (messagesContainer.children.length === 0) {
+                            messagesContainer.style.display = 'none';
+                        }
+                    }, 500); // Deve ser igual ou maior que a duração da transição CSS
+                }
+            }, 5000); // Inicia a transição após 5 segundos
+        });
     }
 });

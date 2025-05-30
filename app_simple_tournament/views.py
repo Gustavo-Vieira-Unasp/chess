@@ -8,6 +8,7 @@ from .forms import PlayerForm
 from django.views.decorators.http import require_POST, require_http_methods
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
+import math
 
 def simple_tournament(request):
     tournaments = Tournament.objects.all().order_by('-id')
@@ -58,10 +59,18 @@ def delete_tournament(request, tournament_id):
 def page_simple_tournament(request, tournament_name):
     tournament = get_object_or_404(Tournament, name__iexact=tournament_name)
     players = tournament.players.all()
-    return render(request, 'page_simple_tournament.html', {
-        'tournament': tournament,
-        'players': players
-    })
+
+    num_players = players.count()
+    recommended_rounds = calculate_swiss_rounds(num_players)
+
+    context = {
+        'tournament' : tournament,
+        'players' : players,
+        'num_players' : num_players,
+        'recommended_rounds' : recommended_rounds,
+    }
+
+    return render(request, 'page_simple_tournament.html', context)
 
 def update_tournament_description(request, tournament_id):
     tournament = get_object_or_404(Tournament, id=tournament_id)
@@ -71,7 +80,7 @@ def update_tournament_description(request, tournament_id):
         tournament.save()
         messages.success(request, "Descrição do torneio atualizada com sucesso!")
         return redirect("page_simple_tournament", tournament_name = tournament.name)
-    return redirect(request, "page_simple_tournament", tournament_name = tournament.name)
+    return redirect("page_simple_tournament", tournament_name = tournament.name)
 
 @require_POST
 def add_player(request, tournament_id):
@@ -83,6 +92,8 @@ def add_player(request, tournament_id):
         player = player_form.save(commit=False)
         player.tournament = tournament
         player.save()
+        update_players_count = Player.objects.filter(tournament=tournament).count()
+        update_recomended_rounds = calculate_swiss_rounds(update_players_count)
         
         return JsonResponse({
             'success': True,
@@ -91,7 +102,9 @@ def add_player(request, tournament_id):
                 'id': player.id,
                 'name': player.name,
                 'rating': player.rating
-            }
+            },
+            'num_players' : update_players_count,
+            'recommended_rounds' : update_recomended_rounds,
         }, status=200) # Status 200 OK
     else:
         errors = player_form.errors.as_json()
@@ -113,3 +126,8 @@ def delete_player(request, tournament_id, player_id):
     player.delete()
     messages.success(request, f"Jogador '{player.name}' excluido com sucesso")
     return redirect('page_simple_tournament', tournament_name=tournament.name)
+
+def calculate_swiss_rounds(num_players):
+    if num_players < 2:
+        return 0
+    return math.ceil(math.log2(num_players))

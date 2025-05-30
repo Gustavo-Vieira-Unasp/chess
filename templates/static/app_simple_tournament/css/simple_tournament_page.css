@@ -25,7 +25,7 @@
     justify-content: flex-start;
     min-height: 100vh;
     padding: 20px;
-    background-color: var(--main-color); /* RESTAURADO: main-color */
+    background-color: var(--main-color);
     box-sizing: border-box;
 }
 
@@ -148,30 +148,97 @@
 /* Mensagens de Feedback */
 .messages {
     list-style: none;
-    padding: 0;
-    margin: 20px 0;
+    padding: 0; /* Removido padding para que o LI o controle */
+    margin: 10px 0;
+    width: 100%;
+    box-sizing: border-box;
+    opacity: 1; 
+    transition: opacity 0.5s ease-out, max-height 0.5s ease-out, padding 0.5s ease-out, margin 0.5s ease-out;
+    max-height: 100px;
+    overflow: hidden;
 }
 
 .messages li {
-    padding: 10px 15px;
-    margin-bottom: 10px;
+    padding: 10px 40px 10px 20px; /* Ajustado o padding-right para dar espaço ao "x" */
+    margin-bottom: 5px;
     border-radius: 5px;
+    display: flex; /* Para alinhar texto e botão 'x' */
+    justify-content: space-between; /* Espaço entre texto e botão 'x' */
+    align-items: center;
+    font-size: 0.95em;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: relative; /* ESSENCIAL para posicionar o botão 'x' absolutamente dentro dele */
+    transition: opacity 0.5s ease-out, max-height 0.5s ease-out, padding 0.5s ease-out, margin 0.5s ease-out;
+    overflow: hidden;
+}
+
+/* Cores para os tipos de mensagem - MANTENHA AS SUAS CORES SE QUISER */
+.messages .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.messages .info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+.messages .warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+.messages .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+/* Estilo para o botão de fechar */
+.close-message-button {
+    font-size: 1.2em;
     font-weight: bold;
-    color: #fff;
-    text-align: center;
-    animation: fadeOut 5s forwards;
+    cursor: pointer;
+    color: inherit; /* Herda a cor do texto da mensagem */
+    padding: 0 5px;
+    line-height: 1;
+    opacity: 0.7;
+    transition: opacity 0.2s ease-in-out;
+
+    /* NOVO: Posicionamento absoluto no canto direito */
+    position: absolute;
+    right: 15px; /* Distância da borda direita */
+    top: 50%; /* Centraliza verticalmente */
+    transform: translateY(-50%); /* Ajusta para centralização exata */
 }
 
-.messages .success { background-color: #28a745; }
-.messages .error { background-color: #dc3545; }
-.messages .info { background-color: #17a2b8; }
-.messages .warning { background-color: #ffc107; }
-
-@keyframes fadeOut {
-    0% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { opacity: 0; display: none; }
+.close-message-button:hover {
+    opacity: 1;
+    color: #000;
 }
+
+/* Classe para esconder a mensagem gradualmente */
+.messages li.hide {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    /* Ajuste aqui para não sumir o display imediatamente, mas após a transição */
+    transition: opacity 0.5s ease-out, max-height 0.5s ease-out 0.1s, padding 0.5s ease-out 0.1s, margin 0.5s ease-out 0.1s;
+}
+/* Estilo para o botão de fechar */
+.close-message-button {
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    color: inherit; /* Herda a cor do texto da mensagem */
+    padding: 0 5px; /* Pequeno padding */
+    line-height: 1; /* Garante alinhamento vertical */
+    opacity: 0.7; /* Suavemente transparente */
+    transition: opacity 0.2s ease-in-out;
+}
+
+.close-message-button:hover {
+    opacity: 1; /* Fica opaco no hover */
+    color: #000; /* Pode mudar para preto no hover para contraste */
+}
+
+/* Classe para esconder a mensagem gradualmente */
+.messages li.hide { /* A classe 'hide' agora é aplicada ao <li> individual */
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 
 /* Linha Divisória */
 .section-divider {
@@ -198,7 +265,7 @@
     gap: 10px;
     margin-top: 20px;
     padding: 10px;
-    background-color: var(--main-color); /* RESTAURADO: main-color */
+    background-color: var(--main-color);
     border-radius: 8px;
     border: 1px solid var(--border-color);
 }
@@ -207,7 +274,7 @@
 .player-card {
     width: 250px;
     height: 60px;
-    background-color: var(--dark-color); /* RESTAURADO: dark-color */
+    background-color: var(--dark-color);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 0;
@@ -224,7 +291,7 @@
 
 .player-card:hover {
     transform: translateY(-3px);
-    background-color: var(--contrast-color); /* RESTAURADO: contrast-color */
+    background-color: var(--contrast-color);
 }
 
 .player-name {
@@ -243,7 +310,7 @@
     min-width: 75px;
     height: 60px;
     background-color: var(--light-color);
-    color: #ddd; /* RESTAURADO: dark-color */
+    color: var(--dark-color); /* Alterado para dark-color para melhor contraste */
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
     display: flex;
@@ -254,14 +321,13 @@
 }
 
 /* --- PADRONIZAÇÃO DO BOTÃO DE EXCLUSÃO (Ícone de Lixeira) --- */
-/* Esta é a implementação do .delete-option vinda do seu simple_tournament.css */
 .delete-player-option { 
     position: absolute;
     top: 50%;
     right: 80px; /* Ajuste para posicionar à direita da caixa do número */
     transform: translateY(-50%);
     
-    background-color: var(--light-color); /* RESTAURADO: light-color */
+    background-color: var(--light-color);
     border: 1px solid var(--border-color);
     border-radius: 4px;
     padding: 5px;
@@ -328,7 +394,7 @@
 /* NO-PLAYERS-MESSAGE */
 .no-players-message {
     text-align: center;
-    color: var(--light-color);
+    color: var(--light-color); /* Ajustado para light-color, pois o container é main-color */
     font-style: italic;
     padding: 10px;
 }
@@ -349,7 +415,7 @@
 }
 
 .modal-content {
-    background-color: var(--contrast-color); /* RESTAURADO: light-color */
+    background-color: var(--contrast-color);
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
@@ -388,7 +454,7 @@
 /* Estilos para o formulário dentro do modal */
 .modal-content h2 {
     margin-top: 0;
-    color: #ddd;
+    color: var(--light-color); /* Ajustado para light-color */
 }
 
 .modal-content .form-field {
@@ -399,7 +465,7 @@
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
-    color: #ddd;
+    color: var(--light-color); /* Ajustado para light-color */
 }
 
 .modal-content input[type="text"] {
@@ -438,4 +504,118 @@
     margin-top: 10px;
     margin-bottom: 10px;
     text-align: center;
+}
+
+/* Seção de Formação de Chaves/Partidas */
+.tournament-creation-section {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    background-color: var(--light-color); /* Fundo branco ou claro */
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px var(--shadow-color);
+    width: 100%; /* Ocupa a largura total do tournament-container */
+    text-align: center; /* Centraliza o h2 e possivelmente os botões */
+}
+
+.tournament-creation-section h2 {
+    color: var(--dark-color);
+    margin-bottom: 20px;
+}
+
+.bracket-players-list {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os cards quebrem para a próxima linha */
+    justify-content: center; /* Centraliza os cards dentro da lista */
+    gap: 10px; /* Espaço entre os cards */
+    padding: 10px;
+    background-color: var(--main-color); /* Fundo verde para a lista de jogadores da chave */
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    min-height: 80px; /* Altura mínima para visualização */
+    align-items: flex-start; /* Alinha os cards ao topo, se tiverem alturas diferentes */
+}
+
+/* Estilo para cada jogador na seção de chaves (simples, por enquanto) */
+.bracket-player-card {
+    background-color: var(--dark-color); /* Fundo do card na chave */
+    color: var(--light-color);
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    display: flex;
+    gap: 5px; /* Espaço entre nome e rating */
+    align-items: center;
+    justify-content: space-between; /* Espaça nome e rating */
+    min-width: 120px; /* Largura mínima para o card */
+    max-width: 200px; /* Largura máxima para o card */
+    box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+    transition: background-color 0.2s ease;
+}
+
+.bracket-player-card:hover {
+    background-color: var(--contrast-color); /* Efeito hover */
+}
+
+.bracket-player-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bracket-player-rating {
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+/* Mensagem "Nenhum jogador" para a seção de chaves */
+.no-players-message-bracket {
+    text-align: center;
+    color: var(--light-color); /* Ajustado para a cor do texto no fundo verde */
+    font-style: italic;
+    padding: 10px;
+    width: 100%;
+}
+
+/* Botão Gerar Chaves */
+.generate-bracket-button {
+    background-color: var(--main-color);
+    color: var(--light-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+    display: block;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.generate-bracket-button:hover {
+    background-color: var(--dark-color);
+}
+
+
+/* ... (O restante do seu CSS existente permanece o mesmo) ... */
+
+/* Ajustes de responsividade para a nova seção */
+@media (max-width: 600px) {
+    /* ... (Seus estilos de media query existentes) ... */
+
+    .bracket-players-list {
+        flex-direction: column; /* Empilha os cards em telas pequenas */
+        justify-content: flex-start; /* Alinha à esquerda em colunas */
+        align-items: center; /* Centraliza os cards na coluna */
+    }
+
+    .bracket-player-card {
+        width: 100%; /* Ocupa a largura total em telas pequenas */
+        max-width: none;
+    }
 }
