@@ -148,26 +148,26 @@
 /* Mensagens de Feedback */
 .messages {
     list-style: none;
-    padding: 0; /* Removido padding para que o LI o controle */
+    padding: 0;
     margin: 10px 0;
     width: 100%;
     box-sizing: border-box;
-    opacity: 1; 
+    opacity: 1;
     transition: opacity 0.5s ease-out, max-height 0.5s ease-out, padding 0.5s ease-out, margin 0.5s ease-out;
     max-height: 100px;
     overflow: hidden;
 }
 
 .messages li {
-    padding: 10px 40px 10px 20px; /* Ajustado o padding-right para dar espaço ao "x" */
+    padding: 10px 40px 10px 20px;
     margin-bottom: 5px;
     border-radius: 5px;
-    display: flex; /* Para alinhar texto e botão 'x' */
-    justify-content: space-between; /* Espaço entre texto e botão 'x' */
+    display: flex;
+    justify-content: space-between;
     align-items: center;
     font-size: 0.95em;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    position: relative; /* ESSENCIAL para posicionar o botão 'x' absolutamente dentro dele */
+    position: relative;
     transition: opacity 0.5s ease-out, max-height 0.5s ease-out, padding 0.5s ease-out, margin 0.5s ease-out;
     overflow: hidden;
 }
@@ -183,17 +183,15 @@
     font-size: 1.2em;
     font-weight: bold;
     cursor: pointer;
-    color: inherit; /* Herda a cor do texto da mensagem */
+    color: inherit;
     padding: 0 5px;
     line-height: 1;
     opacity: 0.7;
     transition: opacity 0.2s ease-in-out;
-
-    /* NOVO: Posicionamento absoluto no canto direito */
     position: absolute;
-    right: 15px; /* Distância da borda direita */
-    top: 50%; /* Centraliza verticalmente */
-    transform: translateY(-50%); /* Ajusta para centralização exata */
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .close-message-button:hover {
@@ -209,34 +207,7 @@
     padding-bottom: 0;
     margin-top: 0;
     margin-bottom: 0;
-    /* Ajuste aqui para não sumir o display imediatamente, mas após a transição */
     transition: opacity 0.5s ease-out, max-height 0.5s ease-out 0.1s, padding 0.5s ease-out 0.1s, margin 0.5s ease-out 0.1s;
-}
-/* Estilo para o botão de fechar */
-.close-message-button {
-    font-size: 1.2em;
-    font-weight: bold;
-    cursor: pointer;
-    color: inherit; /* Herda a cor do texto da mensagem */
-    padding: 0 5px; /* Pequeno padding */
-    line-height: 1; /* Garante alinhamento vertical */
-    opacity: 0.7; /* Suavemente transparente */
-    transition: opacity 0.2s ease-in-out;
-}
-
-.close-message-button:hover {
-    opacity: 1; /* Fica opaco no hover */
-    color: #000; /* Pode mudar para preto no hover para contraste */
-}
-
-/* Classe para esconder a mensagem gradualmente */
-.messages li.hide { /* A classe 'hide' agora é aplicada ao <li> individual */
-    opacity: 0;
-    max-height: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    margin-top: 0;
-    margin-bottom: 0;
 }
 
 
@@ -250,110 +221,99 @@
 
 /* Seção de Jogadores */
 .players-section {
-    margin-bottom: 30px;
+    background-color: var(--light-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px var(--shadow-color);
+    margin-bottom: 20px;
 }
 
 .players-section h2 {
-    text-align: center;
     color: var(--dark-color);
     margin-bottom: 20px;
 }
 
+/* Container da lista de jogadores */
 .players-list-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
+    display: grid;
+    /* Limita a 4 colunas com largura mínima de 120px para cada.
+       Em telas menores, o grid ajustará para menos colunas se 120px não for viável. */
+    grid-template-columns: repeat(4, minmax(120px, 1fr)); /* <-- Ajustado aqui! */
+    gap: 10px; /* Espaçamento entre os cards */
     padding: 10px;
-    background-color: var(--main-color);
+    background-color: var(--background-color); /* Um fundo sutil para a lista */
     border-radius: 8px;
     border: 1px solid var(--border-color);
+    min-height: 80px;
+
+    align-items: stretch; /* Faz com que todos os itens em uma linha tenham a mesma altura */
+    justify-content: center; /* Centraliza os cards horizontalmente na linha se houver espaço extra */
 }
 
-/* Card do Jogador */
+/* Estilo de cada card de jogador na lista principal */
 .player-card {
-    width: 250px;
-    height: 60px;
-    background-color: var(--dark-color);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 0;
-    box-shadow: 0 2px 4px var(--shadow-color);
+    background-color: var(--main-color); /* Cor de fundo do card */
+    color: var(--light-color);
+    padding: 8px 12px; /* Padding ligeiramente menor para o card ser menor */
+    border-radius: 5px;
+    font-size: 0.95em; /* Fonte ligeiramente menor */
+    font-weight: bold;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    overflow: hidden;
-    transition: transform 0.2s ease-in-out;
-    margin-left: auto;
-    margin-right: auto;
-    position: relative; /* ESSENCIAL para o posicionamento absoluto do ícone de exclusão */
+    justify-content: space-between; /* Espaço entre nome e botão */
+    height: 100%; /* Garante que o card ocupe 100% da altura da célula do grid */
+    box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+    transition: background-color 0.2s ease;
+    position: relative;
+    text-align: left; /* Garante que o texto comece à esquerda no span */
 }
 
 .player-card:hover {
-    transform: translateY(-3px);
     background-color: var(--contrast-color);
 }
 
 .player-name {
-    flex-grow: 1;
-    padding-left: 15px;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: var(--light-color);
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
+    text-overflow: ellipsis; /* Corta o nome se for muito longo */
+    flex-grow: 1; /* Permite que o nome ocupe o espaço disponível */
+    margin-right: 5px; /* Adiciona um pequeno espaço entre o nome e o botão/ícone */
 }
 
-.player-number-box {
-    width: 75px;
-    min-width: 75px;
-    height: 60px;
-    background-color: var(--light-color);
-    color: var(--dark-color); /* Alterado para dark-color para melhor contraste */
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    display: flex;
-    justify-content: center;
+/* Estilo do botão de exclusão */
+.delete-player-option {
+    margin-left: 10px;
+    opacity: 0; /* Oculta o botão por padrão */
+    visibility: hidden; /* Oculta para leitores de tela também */
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    cursor: pointer;
+    display: flex; /* Para centralizar o ícone */
     align-items: center;
-    font-size: 1.5em;
-    font-weight: bold;
+    flex-shrink: 0; /* Garante que o botão não encolha */
 }
 
-/* --- PADRONIZAÇÃO DO BOTÃO DE EXCLUSÃO (Ícone de Lixeira) --- */
-.delete-player-option { 
-    position: absolute;
-    top: 50%;
-    right: 80px; /* Ajuste para posicionar à direita da caixa do número */
-    transform: translateY(-50%);
-    
-    background-color: var(--light-color);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    padding: 5px;
-    box-shadow: 0 2px 5px var(--shadow-color);
-    z-index: 10;
-    box-sizing: border-box;
-
-    opacity: 0; /* Escondido por padrão, para transição suave */
-    transition: opacity 0.3s ease;
-}
-
-/* Mostra o container do ícone de exclusão no hover do player-card */
+/* Exibe o botão de exclusão ao passar o mouse sobre o card */
 .player-card:hover .delete-player-option {
     opacity: 1;
+    visibility: visible;
 }
 
-/* Estilos para o Botão de Exclusão (o ícone real dentro de .delete-player-option) */
-.delete-player-button { 
+.delete-player-button {
     background: none;
     border: none;
+    color: var(--light-color);
     cursor: pointer;
+    font-size: 1.1em; /* Tamanho do ícone */
     padding: 0;
-    color: red; /* Cor vermelha para o ícone */
-    font-size: 20px; /* Tamanho do ícone */
-    transition: color 0.3s ease;
-    position: relative; /* Para o pseudo-elemento ::after */
+    line-height: 1;
+    display: flex; /* Para centralizar o ícone bx-trash */
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-player-button:hover {
+    color: darkred; /* <-- Cor ajustada diretamente para darkred aqui! */
 }
 
 .delete-player-button:focus {
@@ -361,13 +321,6 @@
     outline-offset: 2px;
 }
 
-.delete-player-button:hover {
-    color: darkred;
-}
-
-.delete-player-button:hover::after {
-    opacity: 1;
-}
 
 /* Botão Adicionar Novo Jogador (na página principal) */
 .add-player-button {
@@ -394,9 +347,11 @@
 /* NO-PLAYERS-MESSAGE */
 .no-players-message {
     text-align: center;
-    color: var(--light-color); /* Ajustado para light-color, pois o container é main-color */
+    color: var(--dark-color);
     font-style: italic;
     padding: 10px;
+    width: 100%;
+    grid-column: 1 / -1; /* Faz a mensagem ocupar todas as colunas do grid */
 }
 
 /* Modal (Popup) Geral */
@@ -454,7 +409,7 @@
 /* Estilos para o formulário dentro do modal */
 .modal-content h2 {
     margin-top: 0;
-    color: var(--light-color); /* Ajustado para light-color */
+    color: var(--light-color);
 }
 
 .modal-content .form-field {
@@ -465,7 +420,7 @@
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
-    color: var(--light-color); /* Ajustado para light-color */
+    color: var(--light-color);
 }
 
 .modal-content input[type="text"] {
@@ -510,13 +465,13 @@
 .tournament-creation-section {
     margin-top: 20px;
     margin-bottom: 30px;
-    background-color: var(--light-color); /* Fundo branco ou claro */
+    background-color: var(--light-color);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 4px 6px var(--shadow-color);
-    width: 100%; /* Ocupa a largura total do tournament-container */
-    text-align: center; /* Centraliza o h2 e possivelmente os botões */
+    width: 100%;
+    text-align: center;
 }
 
 .tournament-creation-section h2 {
@@ -526,37 +481,37 @@
 
 .bracket-players-list {
     display: flex;
-    flex-wrap: wrap; /* Permite que os cards quebrem para a próxima linha */
-    justify-content: center; /* Centraliza os cards dentro da lista */
-    gap: 10px; /* Espaço entre os cards */
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
     padding: 10px;
-    background-color: var(--main-color); /* Fundo verde para a lista de jogadores da chave */
+    background-color: var(--main-color);
     border-radius: 8px;
     border: 1px solid var(--border-color);
-    min-height: 80px; /* Altura mínima para visualização */
-    align-items: flex-start; /* Alinha os cards ao topo, se tiverem alturas diferentes */
+    min-height: 80px;
+    align-items: flex-start;
 }
 
 /* Estilo para cada jogador na seção de chaves (simples, por enquanto) */
 .bracket-player-card {
-    background-color: var(--dark-color); /* Fundo do card na chave */
+    background-color: var(--dark-color);
     color: var(--light-color);
     padding: 8px 15px;
     border-radius: 5px;
     font-size: 1em;
     font-weight: bold;
     display: flex;
-    gap: 5px; /* Espaço entre nome e rating */
+    gap: 5px;
     align-items: center;
-    justify-content: space-between; /* Espaça nome e rating */
-    min-width: 120px; /* Largura mínima para o card */
-    max-width: 200px; /* Largura máxima para o card */
+    justify-content: space-between;
+    min-width: 120px;
+    max-width: 200px;
     box-shadow: 0 2px 3px rgba(0,0,0,0.1);
     transition: background-color 0.2s ease;
 }
 
 .bracket-player-card:hover {
-    background-color: var(--contrast-color); /* Efeito hover */
+    background-color: var(--contrast-color);
 }
 
 .bracket-player-name {
@@ -573,7 +528,7 @@
 /* Mensagem "Nenhum jogador" para a seção de chaves */
 .no-players-message-bracket {
     text-align: center;
-    color: var(--light-color); /* Ajustado para a cor do texto no fundo verde */
+    color: var(--light-color);
     font-style: italic;
     padding: 10px;
     width: 100%;
@@ -602,20 +557,18 @@
 }
 
 
-/* ... (O restante do seu CSS existente permanece o mesmo) ... */
-
 /* Ajustes de responsividade para a nova seção */
 @media (max-width: 600px) {
     /* ... (Seus estilos de media query existentes) ... */
 
     .bracket-players-list {
-        flex-direction: column; /* Empilha os cards em telas pequenas */
-        justify-content: flex-start; /* Alinha à esquerda em colunas */
-        align-items: center; /* Centraliza os cards na coluna */
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
     }
 
     .bracket-player-card {
-        width: 100%; /* Ocupa a largura total em telas pequenas */
+        width: 100%;
         max-width: none;
     }
 }

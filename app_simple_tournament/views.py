@@ -116,16 +116,17 @@ def add_player(request, tournament_id):
     
 @require_POST
 def delete_player(request, tournament_id, player_id):
-    tournament = get_object_or_404(Tournament, pk=tournament_id)
-    player = get_object_or_404(Player, pk=player_id, tournament=tournament)
+    tournament = get_object_or_404(Tournament, id=tournament_id)
+    player = get_object_or_404(Player, tournament=tournament, id=player_id)
 
-    if player.tournament != tournament:
-        messages.error(request, "Jogador não pertence a este torneio")
-        return redirect('page_simple_tournament', tournament_name=tournament.name)
-
-    player.delete()
-    messages.success(request, f"Jogador '{player.name}' excluido com sucesso")
-    return redirect('page_simple_tournament', tournament_name=tournament.name)
+    try:
+        player.delete()
+        messages.success(request, f"Jogador '{player.name}' excluido com sucesso")
+        return JsonResponse({"success": True, "message": f"Jogador '{player.name}' excluído com sucesso!"}, status=200)
+    
+    except Exception as e:
+        messages.error(request, f"Erro ao excluir jogador: {e}")
+        return JsonResponse({"success": False, "error": str(e)}, status=500)
 
 def calculate_swiss_rounds(num_players):
     if num_players < 2:
