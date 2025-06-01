@@ -240,7 +240,7 @@
     grid-template-columns: repeat(4, minmax(120px, 1fr));
     gap: 10px;
     padding: 10px;
-    background-color: var(--background-color);
+    background-color: var(--background-color); /* ASSUMIR VAR --background-color EXISTE OU DEFINIR */
     border-radius: 8px;
     border: 1px solid var(--border-color);
     min-height: 80px;
@@ -473,17 +473,19 @@
 }
 
 .tournament-creation-section h2 {
-    color: var(--dark-color);
+    color: var(--light-color);
     margin-bottom: 20px;
     padding-bottom: 10px;
     border-bottom: 1px solid var(--border-color);
 }
 
-.bracket-players-list {
+/* --- ALTERAÇÃO / ADIÇÃO MÍNIMA AQUI PARA O CONTÊINER DAS PARTIDAS GERADAS --- */
+/* Esta é a div que o JS preenche com os `match-card`s */
+.bracket-players-list { /* ID para o contêiner das partidas, no seu HTML deve ser <div id="bracketPlayersList"> */
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start; /* ALINHA OS ITENS À ESQUERDA */
-    gap: 10px;
+    justify-content: center; /* Centraliza os cards de partida */
+    gap: 15px; /* Espaço entre as partidas */
     padding: 20px;
     background-color: var(--light-color);
     border-radius: 8px;
@@ -494,12 +496,12 @@
     margin-top: 20px;
 }
 
-/* Estilo para cada jogador na seção de chaves (com nome e número, sem deletar) */
+/* Estilo para cada card de jogador na seção de chaves (com nome e número, sem deletar) */
+/* MANTIDO SEU ESTILO ORIGINAL: Se você usa esta classe para exibir jogadores ANTES de gerar chaves, ela continuará funcionando. */
 .bracket-player-card {
     background-color: var(--main-color);
-    color: var(--light-color);
-    /* Ajustando padding para acomodar 250x75 e o box do número */
-    padding: 5px 10px 5px 15px; /* Top Right Bottom Left */ 
+    color: var(--main-color);
+    padding: 5px 10px 5px 15px; /* Top Right Bottom Left */
     border-radius: 5px;
     font-size: 1em;
     font-weight: bold;
@@ -512,6 +514,7 @@
     box-shadow: 0 2px 3px rgba(0,0,0,0.1);
     transition: background-color 0.2s ease;
     box-sizing: border-box; /* Inclui padding e border na largura/altura total */
+    /* ATENÇÃO: se você não usar mais este estilo para exibir jogadores, pode removê-lo. */
 }
 
 .bracket-player-card:hover {
@@ -523,10 +526,6 @@
     flex-direction: column;
     justify-content: center; /* Centraliza o conteúdo verticalmente */
     flex-grow: 1; /* Permite que ocupe o espaço disponível */
-    /* Remove padding-right se já tiver margin-right no nome */
-    /* white-space: nowrap; // Pode remover se o nome não for muito longo e quebrar linha for aceitável */
-    /* overflow: hidden; */
-    /* text-overflow: ellipsis; */
 }
 
 .bracket-player-name {
@@ -549,8 +548,8 @@
     width: 75px;
     height: 75px;
     min-width: 75px; /* Garante que não encolha */
-    background-color: var(--accent-color); /* Cor de destaque */
-    color: var(--white-text-color); /* Texto branco */
+    background-color: var(--main-color); /* Cor de destaque */
+    color: #ddd; /* Texto branco */
     border-radius: 0 5px 5px 0; /* Cantos arredondados apenas na direita */
     display: flex;
     justify-content: center;
@@ -595,6 +594,75 @@
 }
 
 
+/* --- NOVAS REGRAS CSS PARA EXIBIR AS PARTIDAS GERADAS (match-card) --- */
+/* Estas são as regras que adicionam o visual das partidas */
+.match-card {
+    background-color: var(--dark-color); /* Fundo branco para as partidas */
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    min-width: 280px;
+    max-width: 350px;
+    box-sizing: border-box;
+    text-align: center;
+    flex-grow: 1; /* Permite que cresça para preencher espaço */
+    transition: transform 0.2s ease-in-out;
+}
+
+.match-card:hover {
+    transform: translateY(-3px); /* Pequeno efeito ao passar o mouse */
+}
+
+.match-header {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    color: var(--light-color);
+    text-align: center;
+}
+
+.match-players {
+    display: flex;
+    flex-direction: column; /* Organiza os jogadores verticalmente para melhor leitura */
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    padding: 5px 0;
+}
+
+.player-name-match { /* Novo nome para evitar conflito com .player-name de player-card */
+    font-weight: 600;
+    margin: 5px 0; /* Espaçamento entre os nomes */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%; /* Garante que o texto não exceda o contêiner */
+}
+
+.white-player {
+    color: #28a745; /* Verde para Brancas */
+}
+
+.black-player {
+    color: #dc3545; /* Vermelho para Negras */
+}
+
+.vs-separator {
+    margin: 5px 0;
+    font-weight: bold;
+    color: var(--light-color);
+    font-size: 0.9em;
+}
+
+.bye-info {
+    font-style: italic;
+    color: var(--accent-color); /* Laranja para BYE */
+    margin-top: 5px;
+    font-size: 1em;
+}
+
+
 /* Ajustes de responsividade para a nova seção */
 @media (max-width: 600px) {
     /* ... (Seus estilos de media query existentes) ... */
@@ -612,9 +680,9 @@
     }
 
     /* O número ainda precisa ter 75x75, então o card pode ficar um pouco maior que 100% da largura,
-       ou você pode ajustar o tamanho do número para telas pequenas.
-       Para 100% de largura, o número pode se tornar um problema.
-       Vamos tentar que o número se mantenha 75x75 e veja como fica.
+     ou você pode ajustar o tamanho do número para telas pequenas.
+     Para 100% de largura, o número pode se tornar um problema.
+     Vamos tentar que o número se mantenha 75x75 e veja como fica.
     */
     .bracket-player-number {
         /* Mantém 75x75 */
@@ -624,5 +692,12 @@
         margin-right: 0; /* Remove o ajuste de margin */
         right: 0; /* Remove o ajuste de right */
         border-radius: 0 5px 5px 0; /* Mantém apenas cantos da direita arredondados */
+    }
+
+    /* Responsividade para os match-cards */
+    .match-card {
+        min-width: unset;
+        width: 100%;
+        max-width: 100%;
     }
 }

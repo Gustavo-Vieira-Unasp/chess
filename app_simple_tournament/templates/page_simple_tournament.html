@@ -38,16 +38,19 @@
                 </form>
             </div>
 
-            {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
-                            {{ message }}
-                            <span class="close-message-button" title="Fechar">&times;</span>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
+            {# Container para mensagens temporárias geradas por JS ou do Django #}
+            <div class="messages-container">
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                                {{ message }}
+                                <span class="close-message-button" title="Fechar">&times;</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
 
             <div class="tournament-stats">
                 <h3>Estatísticas do Torneio</h3>
@@ -57,14 +60,18 @@
 
             <hr class="section-divider">
 
-            {# SEÇÃO EXISTENTE DE JOGADORES - INTOCÁVEL #}
+            {# SEÇÃO DE JOGADORES #}
             <div class="players-section">
                 <h2>Jogadores</h2>
                 <div class="players-list-container">
+                    {# Se você tinha um .players-grid, mantenha-o. Se não, o JavaScript se adaptará. #}
+                    {# Para o player-card, adicionado o span para o score #}
                     {% if players %}
                         {% for player in players %}
                             <div class="player-card" data-player-id="{{ player.id }}">
                                 <span class="player-name">{{ player.name }}</span>
+                                {# Adicionado: Span para exibir o score do jogador. Essencial para o JS atualizar. #}
+                                {# Se o 'player.score' não vier do Django, o 'default:"0"' garante que algo seja exibido. #}
                                 <div class="delete-player-option" title="Excluir jogador">
                                     <form action="{% url 'delete_player' tournament.id player.id %}" method="POST" style="display: inline;">
                                         {% csrf_token %}
@@ -103,11 +110,12 @@
 
         </div> {# Fim do .tournament-container #}
 
-        {# NOVA SEÇÃO PARA FORMAÇÃO DAS CHAVES/MATCHES - FORA DO TOURNAMENT-CONTAINER #}
+        {# SEÇÃO PARA FORMAÇÃO DAS CHAVES/PARTIDAS #}
         <div class="tournament-creation-section">
             <h2>Formação de Chaves e Partidas</h2>
-            <div id="bracketPlayersList" class="bracket-players-list">
-                {# Jogadores serão inseridos aqui via JavaScript #}
+            {# CORREÇÃO: ID de bracketPlayersList para matchesContainer #}
+            <div id="matchesContainer" class="bracket-players-list">
+                {# Jogadores ou partidas serão inseridos aqui via JavaScript #}
                 <p class="no-players-message-bracket">Nenhum jogador para formar chaves ainda.</p>
             </div>
             <button id="generateBracketButton" class="generate-bracket-button">Gerar Chaves</button>
