@@ -1,28 +1,35 @@
 {% extends 'base.html' %}
 {% load static i18n %}
 
-<!-- Title Block -->
 {% block 'title' %}
 {{ block.super }} Gerenciar - {% trans "Torneio Simples" %}
 {% endblock %}
 
-<!-- Head Block: CSS and Meta Tags -->
 {% block 'head' %}
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="{% static 'app_simple_tournament/css/simple_tournament.css' %}">
 <link rel="icon" href="{% static 'app_simple_tournament/images/favicon.ico' %}" type="image/x-icon">
 {% endblock %}
 
-<!-- Dashboard Block: Main Content -->
 {% block 'dashboard' %}
 <noscript>
     <p>Por favor, habilite o JavaScript para usar esta página.</p>
 </noscript>
 
+<div class="messages-container">
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+
 <div class="dashboard">
-    <!-- First Container: Create Tournament -->
     <div class="container" id="createTournamentBtn" role="button" tabindex="0">
         <div class="bracket-section">
+            {# Este include deve apontar para o SVG correto no seu projeto #}
             {% include 'app_simple_tournament/svg/tournament_bracket.html' %}
             <div class="svg-fallback" style="display: none;">SVG não disponível</div>
         </div>
@@ -31,35 +38,31 @@
         </div>
     </div>
 
-    <!-- Dynamically Generated Tournament Containers -->
     {% for tournament in tournaments %}
-    <a href="{% url 'page_simple_tournament' tournament.name %}" class="tournament-link-container">
+    {# O link agora usa 'tournament_detail' e passa o ID do torneio #}
+    <a href="{% url 'tournament_detail' tournament.id %}" class="tournament-link-container">
         <div class="container" data-tournament-id="{{ tournament.id }}">
-            <!-- Delete Option (Trash Can Icon) -->
             <div class="delete-option hidden">
-                <form action="{% url 'delete_tournament' tournament.id %}" method="POST" style="display: inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="delete-button" role="button" tabindex="0" aria-label="{% trans 'Excluir torneio' %}">
-                        <i class='bx bx-trash'></i>
-                    </button>
-                </form>
+                {# O botão de deletar agora é um botão simples e a ação é via JS #}
+                <button type="button" class="delete-button" role="button" tabindex="0" aria-label="{% trans 'Excluir torneio' %}" data-tournament-id="{{ tournament.id }}">
+                    <i class='bx bx-trash'></i>
+                </button>
             </div>
-            <!-- Text Section -->
             <div class="text-section">
                 <div class="tournament-name">{{ tournament.name }}</div>
-                <div class="tournament-date">{{ tournament.date }}</div>
+                <div class="tournament-date">{{ tournament.date|default:"Data não definida" }}</div>
             </div>
         </div>
     </a>
     {% endfor %}
 </div>
 
-<!-- The Modal -->
-<div id="tournamentModal" class="modal">
+<div id="tournamentModal" class="modal" aria-hidden="true" role="dialog">
     <div class="modal-content">
-        <span class="close">&times;</span>
+        <span class="close" aria-label="Fechar">&times;</span>
         <h2>Criar Torneio</h2>
-        <form id="tournamentForm" method="POST" action="{% url 'create_tournament' %}">
+        {# AGORA COM O ATRIBUTO ACTION APONTANDO PARA A URL CORRETA #}
+        <form id="tournamentForm" action="{% url 'create_tournament' %}" method="post"> 
             {% csrf_token %}
             <div class="form-row">
                 <div class="form-group">
@@ -69,17 +72,23 @@
                 </div>
                 <div class="form-group">
                     <label for="tournament_date">Data do Torneio:</label>
-                    <input type="date" id="tournament_date" name="tournament_date" required>
+                    <input type="date" id="tournament_date" name="tournament_date">
                     <small class="error-message">Campo obrigatório</small>
                 </div>
             </div>
+            {# O campo de descrição agora segue o mesmo padrão de form-group #}
+            <div class="form-group"> 
+                <label for="tournament_description">Descrição (Opcional):</label>
+                <textarea id="tournament_description" name="tournament_description" rows="3"></textarea>
+            </div>
             <button type="submit">Criar</button>
         </form>
+        <div id="create-tournament-error" style="color: red; margin-top: 10px;"></div>
+        <div id="create-tournament-success" style="color: green; margin-top: 10px;"></div>
     </div>
 </div>
 {% endblock %}
 
-<!-- Body Block: JavaScript -->
 {% block 'body' %}
 <script src="{% static 'app_simple_tournament/js/simple_tournament.js' %}"></script>
 {% endblock %}

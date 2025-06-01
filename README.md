@@ -28,3 +28,4 @@ V.:
   -0.0.0.0.0.0.0.0.023.1 (add/remove players bug fix)
   -0.0.0.0.0.0.0.0.023.2 (errors and errors)
   -0.0.0.0.0.0.0.0.024 (Ozwaldo & Nicolau slove)
+  -0.0.0.0.0.0.0.0.025 (outer fix)

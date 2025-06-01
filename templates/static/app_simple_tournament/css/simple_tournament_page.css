@@ -237,36 +237,34 @@
 /* Container da lista de jogadores */
 .players-list-container {
     display: grid;
-    /* Limita a 4 colunas com largura mínima de 120px para cada.
-       Em telas menores, o grid ajustará para menos colunas se 120px não for viável. */
-    grid-template-columns: repeat(4, minmax(120px, 1fr)); /* <-- Ajustado aqui! */
-    gap: 10px; /* Espaçamento entre os cards */
+    grid-template-columns: repeat(4, minmax(120px, 1fr));
+    gap: 10px;
     padding: 10px;
-    background-color: var(--background-color); /* Um fundo sutil para a lista */
+    background-color: var(--background-color);
     border-radius: 8px;
     border: 1px solid var(--border-color);
     min-height: 80px;
 
-    align-items: stretch; /* Faz com que todos os itens em uma linha tenham a mesma altura */
-    justify-content: center; /* Centraliza os cards horizontalmente na linha se houver espaço extra */
+    align-items: stretch;
+    justify-content: center;
 }
 
 /* Estilo de cada card de jogador na lista principal */
 .player-card {
-    background-color: var(--main-color); /* Cor de fundo do card */
+    background-color: var(--main-color);
     color: var(--light-color);
-    padding: 8px 12px; /* Padding ligeiramente menor para o card ser menor */
+    padding: 8px 12px;
     border-radius: 5px;
-    font-size: 0.95em; /* Fonte ligeiramente menor */
+    font-size: 0.95em;
     font-weight: bold;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Espaço entre nome e botão */
-    height: 100%; /* Garante que o card ocupe 100% da altura da célula do grid */
+    justify-content: space-between;
+    height: 100%;
     box-shadow: 0 2px 3px rgba(0,0,0,0.1);
     transition: background-color 0.2s ease;
     position: relative;
-    text-align: left; /* Garante que o texto comece à esquerda no span */
+    text-align: left;
 }
 
 .player-card:hover {
@@ -276,21 +274,21 @@
 .player-name {
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* Corta o nome se for muito longo */
-    flex-grow: 1; /* Permite que o nome ocupe o espaço disponível */
-    margin-right: 5px; /* Adiciona um pequeno espaço entre o nome e o botão/ícone */
+    text-overflow: ellipsis;
+    flex-grow: 1;
+    margin-right: 5px;
 }
 
 /* Estilo do botão de exclusão */
 .delete-player-option {
     margin-left: 10px;
-    opacity: 0; /* Oculta o botão por padrão */
-    visibility: hidden; /* Oculta para leitores de tela também */
+    opacity: 0;
+    visibility: hidden;
     transition: opacity 0.2s ease, visibility 0.2s ease;
     cursor: pointer;
-    display: flex; /* Para centralizar o ícone */
+    display: flex;
     align-items: center;
-    flex-shrink: 0; /* Garante que o botão não encolha */
+    flex-shrink: 0;
 }
 
 /* Exibe o botão de exclusão ao passar o mouse sobre o card */
@@ -304,16 +302,16 @@
     border: none;
     color: var(--light-color);
     cursor: pointer;
-    font-size: 1.1em; /* Tamanho do ícone */
+    font-size: 1.1em;
     padding: 0;
     line-height: 1;
-    display: flex; /* Para centralizar o ícone bx-trash */
+    display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .delete-player-button:hover {
-    color: darkred; /* <-- Cor ajustada diretamente para darkred aqui! */
+    color: darkred;
 }
 
 .delete-player-button:focus {
@@ -351,7 +349,7 @@
     font-style: italic;
     padding: 10px;
     width: 100%;
-    grid-column: 1 / -1; /* Faz a mensagem ocupar todas as colunas do grid */
+    grid-column: 1 / -1;
 }
 
 /* Modal (Popup) Geral */
@@ -465,11 +463,11 @@
 .tournament-creation-section {
     margin-top: 20px;
     margin-bottom: 30px;
-    background-color: var(--light-color);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 6px var(--shadow-color);
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
     width: 100%;
     text-align: center;
 }
@@ -477,61 +475,101 @@
 .tournament-creation-section h2 {
     color: var(--dark-color);
     margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .bracket-players-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start; /* ALINHA OS ITENS À ESQUERDA */
     gap: 10px;
-    padding: 10px;
-    background-color: var(--main-color);
+    padding: 20px;
+    background-color: var(--light-color);
     border-radius: 8px;
     border: 1px solid var(--border-color);
     min-height: 80px;
     align-items: flex-start;
+    box-shadow: 0 4px 6px var(--shadow-color);
+    margin-top: 20px;
 }
 
-/* Estilo para cada jogador na seção de chaves (simples, por enquanto) */
+/* Estilo para cada jogador na seção de chaves (com nome e número, sem deletar) */
 .bracket-player-card {
-    background-color: var(--dark-color);
+    background-color: var(--main-color);
     color: var(--light-color);
-    padding: 8px 15px;
+    /* Ajustando padding para acomodar 250x75 e o box do número */
+    padding: 5px 10px 5px 15px; /* Top Right Bottom Left */ 
     border-radius: 5px;
     font-size: 1em;
     font-weight: bold;
     display: flex;
-    gap: 5px;
+    flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    min-width: 120px;
-    max-width: 200px;
+    width: 250px; /* Largura fixa */
+    height: 75px; /* Altura fixa */
     box-shadow: 0 2px 3px rgba(0,0,0,0.1);
     transition: background-color 0.2s ease;
+    box-sizing: border-box; /* Inclui padding e border na largura/altura total */
 }
 
 .bracket-player-card:hover {
     background-color: var(--contrast-color);
 }
 
+.bracket-player-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centraliza o conteúdo verticalmente */
+    flex-grow: 1; /* Permite que ocupe o espaço disponível */
+    /* Remove padding-right se já tiver margin-right no nome */
+    /* white-space: nowrap; // Pode remover se o nome não for muito longo e quebrar linha for aceitável */
+    /* overflow: hidden; */
+    /* text-overflow: ellipsis; */
+}
+
 .bracket-player-name {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: nowrap; /* Garante que o nome fique em uma linha */
+    overflow: hidden; /* Esconde o excesso */
+    text-overflow: ellipsis; /* Adiciona "..." */
+    text-align: left;
+    margin-bottom: 5px; /* Espaço entre nome e rating */
 }
 
 .bracket-player-rating {
     font-size: 0.9em;
-    opacity: 0.8;
+    color: var(--accent-color);
+    font-weight: normal;
+    text-align: left;
 }
 
-/* Mensagem "Nenhum jogador" para a seção de chaves */
+/* Estilo para o box de 75x75px com o número */
+.bracket-player-number {
+    width: 75px;
+    height: 75px;
+    min-width: 75px; /* Garante que não encolha */
+    background-color: var(--accent-color); /* Cor de destaque */
+    color: var(--white-text-color); /* Texto branco */
+    border-radius: 0 5px 5px 0; /* Cantos arredondados apenas na direita */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.8em; /* Aumentei a fonte para o número */
+    margin-right: -10px; /* Ajuste para compensar o padding do pai e ficar no final */
+    position: relative; /* Para garantir que fique no canto */
+    right: -15px; /* Move para a direita para sair do padding do pai */
+    padding-left: 5px; /* Pequeno padding interno para o número */
+}
+
+/* A mensagem "Nenhum jogador..." pode ser exibida ou escondida via JS */
 .no-players-message-bracket {
-    text-align: center;
-    color: var(--light-color);
+    color: var(--dark-color);
     font-style: italic;
-    padding: 10px;
     width: 100%;
+    text-align: center;
+    margin-top: 15px;
 }
 
 /* Botão Gerar Chaves */
@@ -570,5 +608,21 @@
     .bracket-player-card {
         width: 100%;
         max-width: none;
+        padding: 5px 10px 5px 15px; /* Ajuste o padding para 100% de largura */
+    }
+
+    /* O número ainda precisa ter 75x75, então o card pode ficar um pouco maior que 100% da largura,
+       ou você pode ajustar o tamanho do número para telas pequenas.
+       Para 100% de largura, o número pode se tornar um problema.
+       Vamos tentar que o número se mantenha 75x75 e veja como fica.
+    */
+    .bracket-player-number {
+        /* Mantém 75x75 */
+        width: 75px;
+        height: 75px;
+        min-width: 75px;
+        margin-right: 0; /* Remove o ajuste de margin */
+        right: 0; /* Remove o ajuste de right */
+        border-radius: 0 5px 5px 0; /* Mantém apenas cantos da direita arredondados */
     }
 }
